@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
 
@@ -91,13 +92,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Toast.makeText(this, "用户不存在", Toast.LENGTH_SHORT).show();
         }else if(userDao.find(userName).getPassWd().equals(passWd)){
             //登陆成功
+            //保存登录的用户名
             SharedPreferences sharedPreferences = getSharedPreferences("info",0);
             SharedPreferences.Editor editor =sharedPreferences.edit();
             editor.putString("_username",userName);
             editor.commit();
             Toast.makeText(this, "登陆成功", Toast.LENGTH_SHORT).show();
             intent = new Intent();
-            intent.setClass(this, MainActivity.class);
+            intent.setClass(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }else{
             Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
