@@ -33,7 +33,7 @@ import static com.shyling.healthmanager.R.string.check;
  */
 @TargetApi(16)
 public class TestingActivity extends AppCompatActivity implements View.OnClickListener {
-    ActionBar actionBar;
+   // ActionBar actionBar;
     GifImageView gifImageView;
     TextView textBtn, result;
     private AlertDialog exitDialog;
@@ -48,13 +48,13 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        actionBar = getSupportActionBar();
+       /* actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setIcon(R.mipmap.ic_launcher);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setTitle(check);
-        }
+        }*/
         setContentView(R.layout.activity_testing);
         findViews();
         bindListener();
@@ -62,7 +62,6 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         if (bluetoothAdapter == null) {
             Utils.Toast(this, R.string.bluetooth_unavailable);
             finish();
-            return;
         }
         savedBluetoothState = bluetoothAdapter.isEnabled();
         doInit();
@@ -254,7 +253,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bluetoothAdapter != null && !savedBluetoothState) {
+        if (!savedBluetoothState) {
             bluetoothAdapter.disable();
         }
     }

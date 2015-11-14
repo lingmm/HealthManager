@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setIcon(mipmap.ic_launcher);
+            //actionBar.setIcon(mipmap.ic_launcher);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         };
         viewPager.setAdapter(fragmentPagerAdapter);
         setListener();
-    }
 
+    }
     private void setListener() {
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.main_activity, menu);
+
         return true;
     }
 
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemId == id.exit) {
             finish();
         } else if (itemId == id.setting) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingActivity.class));
         }
         return true;
     }
