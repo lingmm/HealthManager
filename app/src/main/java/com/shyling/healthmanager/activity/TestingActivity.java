@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -26,12 +25,10 @@ import java.io.OutputStream;
 
 import pl.droidsonroids.gif.GifImageView;
 
-import static com.shyling.healthmanager.R.string.check;
-
 /**
  * Created by shy on 2015/11/8.
  */
-@TargetApi(16)
+
 public class TestingActivity extends AppCompatActivity implements View.OnClickListener {
    // ActionBar actionBar;
     GifImageView gifImageView;
@@ -62,6 +59,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         if (bluetoothAdapter == null) {
             Utils.Toast(this, R.string.bluetooth_unavailable);
             finish();
+            return;
         }
         savedBluetoothState = bluetoothAdapter.isEnabled();
         doInit();
@@ -167,6 +165,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @TargetApi(16)
     @Override
     public void onClick(View v) {
         if (isTesting && socket != null && socket.isConnected()) {
@@ -224,6 +223,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @TargetApi(16)
     private void findViews() {
         gifImageView = (GifImageView) findViewById(R.id.gifview);
         gifImageView.setImageResource(R.drawable.checking);
@@ -253,7 +253,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!savedBluetoothState) {
+        if (bluetoothAdapter != null && !savedBluetoothState) {
             bluetoothAdapter.disable();
         }
     }
