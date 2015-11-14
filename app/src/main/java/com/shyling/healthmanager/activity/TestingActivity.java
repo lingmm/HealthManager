@@ -62,7 +62,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         if (bluetoothAdapter == null) {
             Utils.Toast(this, R.string.bluetooth_unavailable);
             finish();
-
+            return;
         }
         savedBluetoothState = bluetoothAdapter.isEnabled();
         doInit();
