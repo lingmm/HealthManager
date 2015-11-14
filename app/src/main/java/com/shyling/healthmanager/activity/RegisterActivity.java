@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.util.DBHelper;
 
@@ -65,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                 addUser(dbHelper.getReadableDatabase(), userName, passWd, uName, birthDay, cellPhone);
                 Toast.makeText(RegisterActivity.this,"注册成功！",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
-                intent.setAction("henu.logon");
+                intent.setClass(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
 
