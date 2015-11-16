@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:ems="12"
-            android:inputType="date"
+            android:focusable="false"
             android:hint="请输入出生年月" />
     </TableRow>
     <TableRow

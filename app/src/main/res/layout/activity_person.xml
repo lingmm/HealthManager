@@ -100,12 +100,13 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:text="联系方式："/>
-        <TextView
-            android:id="@+id/tv_person_phone"
+        <EditText
+            android:id="@+id/et_person_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:textSize="20sp"
+            android:textColor="#686666"
             android:text="手机号"/>
     </LinearLayout>
 
@@ -113,4 +114,37 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         style="@style/UnderLine" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+        <Button
+            android:id="@+id/save_news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="保存信息"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp" />
+        <Button
+            android:id="@+id/modify_news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:text="修改信息"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:background="@color/colorPrimary"
+            android:layout_marginEnd="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 </LinearLayout>
