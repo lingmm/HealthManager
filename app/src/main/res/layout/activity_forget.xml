@@ -21,6 +21,7 @@
             android:id="@+id/et_newpwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:ems="10"
             android:hint="请输入你的密码"
             android:layout_alignParentTop="true"

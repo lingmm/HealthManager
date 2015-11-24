@@ -8,7 +8,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal">
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -26,7 +26,7 @@
             android:layout_toRightOf="@+id/textView"
             android:layout_toEndOf="@+id/textView" />
     </RelativeLayout>
-    <!-- 姓名-->
+    &lt;!&ndash; 姓名&ndash;&gt;
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,11 +49,11 @@
             android:layout_toRightOf="@+id/textView4"
             android:layout_toEndOf="@+id/textView4" />
     </RelativeLayout>
-    <!-- 联系方式-->
+    &lt;!&ndash; 联系方式&ndash;&gt;
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="10dp">-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
