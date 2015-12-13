@@ -21,7 +21,7 @@
         android:layout_marginRight="20dp"
         android:padding="20dp"
         android:textSize="20sp"
-        android:background="#12ca83"
+        android:background="@drawable/ripple_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:id="@+id/check" />

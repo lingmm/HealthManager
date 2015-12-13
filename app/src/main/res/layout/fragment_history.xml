@@ -4,9 +4,14 @@
     android:layout_height="match_parent"
     tools:context="com.shyling.healthmanager.fragment.HistoryFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/historylist"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefesh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/historylist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

@@ -9,13 +9,14 @@ import android.widget.TextView;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.model.TestRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by shy on 2015/12/13.
  */
 public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.ViewHolder> {
-
+    private SimpleDateFormat simpleDateFormat;
     private TestRecord[] testRecords;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -35,6 +36,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
 
     public HistoryListAdapter(TestRecord[] testRecords) {
         this.testRecords = testRecords;
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -50,7 +52,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.time.setText(new Date(testRecords[position].getTime()).toString());
+        holder.time.setText(simpleDateFormat.format(new Date(testRecords[position].getTime())));
         holder.height.setText(String.valueOf(testRecords[position].getHeight()));
         holder.weight.setText(String.valueOf(testRecords[position].getWeight()));
         holder.hbp.setText(String.valueOf(testRecords[position].getHbp()));
