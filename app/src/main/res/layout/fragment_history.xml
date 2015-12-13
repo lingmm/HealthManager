@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     tools:context="com.shyling.healthmanager.fragment.HistoryFragment">
 
-    <CalendarView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/historylist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></CalendarView>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 </FrameLayout>
