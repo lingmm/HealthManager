@@ -10,11 +10,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
-
-import java.io.Serializable;
 
 
 /**
@@ -41,7 +40,7 @@ public class ValidateActivity extends AppCompatActivity{
                 Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from tb_userinfo where cellPhone like ?", new String[]{"%"
                         + vphone + "%"});
                 if(TextUtils.isEmpty(vphone)){
-                    Utils.Toast(ValidateActivity.this, "请输入联系方式");
+                    Utils.Toast("请输入联系方式");
                 }else if (cursor.moveToFirst()) {
                     SharedPreferences sharedPreferences = getSharedPreferences("infopasswd",0);
                     SharedPreferences.Editor editor =sharedPreferences.edit();
@@ -51,7 +50,7 @@ public class ValidateActivity extends AppCompatActivity{
                     intent.setClass(ValidateActivity.this, ForgetActivity.class);
                     startActivity(intent);
                 }else {
-                    Utils.Toast(ValidateActivity.this, "输入有误");
+                    Utils.Toast("输入有误");
                 }
             }
         });

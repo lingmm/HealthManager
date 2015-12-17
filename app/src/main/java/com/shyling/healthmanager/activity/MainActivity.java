@@ -1,8 +1,6 @@
 package com.shyling.healthmanager.activity;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,7 +20,10 @@ import com.shyling.healthmanager.fragment.HistoryFragment;
 import com.shyling.healthmanager.fragment.TestFragment;
 import com.shyling.healthmanager.util.Utils;
 
-import static com.shyling.healthmanager.R.*;
+import static com.shyling.healthmanager.R.color;
+import static com.shyling.healthmanager.R.id;
+import static com.shyling.healthmanager.R.layout;
+import static com.shyling.healthmanager.R.string;
 
 /**
  * Created by shy on 2015/11/8.
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         if (System.currentTimeMillis() - backButtonProcessTime <= 2000) {
             finish();
         }else {
-            Utils.Toast(this, string.doublebackbutton);
+            Utils.Toast(string.doublebackbutton);
             backButtonProcessTime = System.currentTimeMillis();
         }
     }

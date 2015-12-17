@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.model.TestRecord;
+import com.shyling.healthmanager.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,12 +52,18 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.time.setText(simpleDateFormat.format(new Date(testRecords[position].getTime())));
         holder.height.setText(String.valueOf(testRecords[position].getHeight()));
         holder.weight.setText(String.valueOf(testRecords[position].getWeight()));
         holder.hbp.setText(String.valueOf(testRecords[position].getHbp()));
         holder.lbp.setText(String.valueOf(testRecords[position].getLbp()));
         holder.pulse.setText(String.valueOf(testRecords[position].getPulse()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.Toast("点击: "+position);
+            }
+        });
     }
 }

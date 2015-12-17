@@ -8,57 +8,70 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 
 import com.shyling.healthmanager.activity.TestingActivity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
 /**
  * Created by shy on 2015/11/6.
  */
-public class FindAndConnectionBluetoothDevice extends Thread{
-    TestingActivity context;
+public class FindAndConnectionBluetoothDevice extends Thread {
+    TestingActivity testingActivity;
     BluetoothAdapter bluetoothAdapter;
     BroadcastReceiver broadcastReceiver;
     private ArrayList<BluetoothDevice> bluetoothDevices;
     FindedListener findedListener;
     private boolean success = false;
 
-    public interface FindedListener{
+    public interface FindedListener {
         void onStart();
+
         void onConnected(BluetoothSocket socket);
+
         void onStop();
+
         void onFailed();
     }
 
     @TargetApi(19)
-    public FindAndConnectionBluetoothDevice(final Context context){
-        this.context = (TestingActivity)context;
-        bluetoothAdapter = this.context.bluetoothAdapter;
+    public FindAndConnectionBluetoothDevice(final Context context) {
+        this.testingActivity = (TestingActivity) context;
+        bluetoothAdapter = this.testingActivity.bluetoothAdapter;
         bluetoothDevices = new ArrayList<>();
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
+            public void onReceive(final Context context, Intent intent) {
+                if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if(Const.DEVICENAME.equals(device.getName())){
+                    if (Const.DEVICENAME.equals(device.getName())) {
+                        context.registerReceiver(new BroadcastReceiver() {
+                            @Override
+                            public void onReceive(Context ctx, Intent intent) {
+                                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                                int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE);
+                                context.unregisterReceiver(this);
+                                if (state == BluetoothDevice.BOND_BONDED) {
+                                    connect(device);
+                                }
+                            }
+                        }, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+                        testingActivity.sendToResult("尝试配对: "+device.getAddress());
                         device.setPin("0000".getBytes());
                         device.createBond();
-                        connect(device);
+                        device.setPairingConfirmation(false);
                     }
-                }else if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(intent.getAction())){
-                    if(findedListener!=null){
+                } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(intent.getAction())) {
+                    if (findedListener != null) {
                         findedListener.onStart();
                     }
-                }else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())){
-                    if(findedListener!=null){
+                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
+                    if (findedListener != null) {
                         findedListener.onStop();
-                        if(!success){
+                        if (!success) {
                             findedListener.onFailed();
                         }
                     }
@@ -68,39 +81,37 @@ public class FindAndConnectionBluetoothDevice extends Thread{
         };
     }
 
-    public void setFindedListener(FindedListener findedListener){
+    public void setFindedListener(FindedListener findedListener) {
         this.findedListener = findedListener;
     }
 
     public void run() {
         Set<BluetoothDevice> bluetoothDevices = bluetoothAdapter.getBondedDevices();
-        Iterator<BluetoothDevice> iterator = bluetoothDevices.iterator();
-        while(iterator.hasNext()){
-            BluetoothDevice device = iterator.next();
-            if(Const.DEVICENAME.equals(device.getName())){
-                context.sendToResult(String.format("使用已配对设备：%s,地址：%s",device.getName(),device.getAddress()));
-                context.sendToResult("尝试连接");
-                if(connect(device)){
+        for (BluetoothDevice device : bluetoothDevices) {
+            if (Const.DEVICENAME.equals(device.getName())) {
+                testingActivity.sendToResult(String.format("使用已配对设备：%s,地址：%s", device.getName(), device.getAddress()));
+                testingActivity.sendToResult("尝试连接");
+                if (connect(device)) {
                     return;
                 }
             }
         }
-        context.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-        context.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-        context.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
         bluetoothAdapter.startDiscovery();
     }
 
-    public boolean connect(BluetoothDevice device){
+    public boolean connect(BluetoothDevice device) {
         try {
             BluetoothSocket socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
             socket.connect();
             findedListener.onConnected(socket);
             success = true;
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            context.sendToResult("连接失败");
+            testingActivity.sendToResult("连接失败");
             return false;
         }
     }

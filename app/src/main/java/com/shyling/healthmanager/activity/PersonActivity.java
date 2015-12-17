@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
@@ -68,7 +69,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()){
             case R.id.modify_news:
                 cellphone.setEnabled(true);
-                Utils.Toast(PersonActivity.this,"修改信息");
+                Utils.Toast("修改信息");
                 break;
             case R.id.save_news:
                 cellphone.setEnabled(false);
@@ -77,7 +78,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
                 values.put("cellPhone",ucellPhone);
                 database.update("tb_userinfo", values, "userName=?", new String[]{sharedPreferences.getString("_username", null)});
                 database.close();
-                Utils.Toast(PersonActivity.this,"保存成功");
+                Utils.Toast("保存成功");
         }
     }
 }
