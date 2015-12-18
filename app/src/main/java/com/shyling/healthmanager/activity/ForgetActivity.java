@@ -40,9 +40,9 @@ public class ForgetActivity extends AppCompatActivity {
                     String passWd = ((EditText) findViewById(R.id.et_newpwd)).getText().toString();
                     String repassWd = ((EditText) findViewById(R.id.et_renewpwd)).getText().toString();
                     if(TextUtils.isEmpty(passWd)){
-                        Utils.Toast(ForgetActivity.this, "请输入密码");
+                        Utils.Toast("请输入密码");
                     }else if(TextUtils.isEmpty(repassWd)){
-                        Utils.Toast(ForgetActivity.this, "请输入密码");
+                        Utils.Toast("请输入密码");
                     }else if (!passWd.equals(repassWd)) {
                             Toast.makeText(ForgetActivity.this, "两次输入密码不一样!", Toast.LENGTH_LONG).show();
                             return;
@@ -54,7 +54,7 @@ public class ForgetActivity extends AppCompatActivity {
                         values.put("passWd", repassWd);
                         database.update("tb_userinfo", values, "cellPhone=?", new String[]{sharedPreferences.getString("_phone", null)});
                         database.close();
-                        Utils.Toast(ForgetActivity.this, "修改密码成功！");
+                        Utils.Toast("修改密码成功！");
                         Intent intent = new Intent();
                         intent.setClass(ForgetActivity.this, LoginActivity.class);
                         startActivity(intent);

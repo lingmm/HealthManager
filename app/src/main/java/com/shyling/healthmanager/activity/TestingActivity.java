@@ -5,12 +5,12 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.model.TestRecord;
@@ -30,7 +30,7 @@ import pl.droidsonroids.gif.GifImageView;
  */
 
 public class TestingActivity extends AppCompatActivity implements View.OnClickListener {
-   // ActionBar actionBar;
+    // ActionBar actionBar;
     GifImageView gifImageView;
     TextView textBtn, result;
     private AlertDialog exitDialog;
@@ -57,7 +57,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         bindListener();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            Utils.Toast(this, R.string.bluetooth_unavailable);
+            Utils.Toast(R.string.bluetooth_unavailable);
             finish();
             return;
         }
@@ -72,37 +72,44 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void doInit() {
         if (!bluetoothAdapter.isEnabled()) {
-            Utils.Toast(this, R.string.ask_enable_bluetooth);
-            bluetoothAdapter.enable();
-            doInit();
-            return;
+            Utils.Toast(R.string.ask_enable_bluetooth);
+            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 130);
+        } else {
+            onActivityResult(130, RESULT_OK, null);
         }
-        sendToResult(R.string.enable_bluetooth);
-        super.onStart();
-        findAndConnectionBluetoothDevice = new FindAndConnectionBluetoothDevice(this);
-        findAndConnectionBluetoothDevice.setFindedListener(new FindAndConnectionBluetoothDevice.FindedListener() {
-            @Override
-            public void onStart() {
-                sendToResult(R.string.start_search);
-            }
+    }
 
-            @Override
-            public void onConnected(BluetoothSocket socket) {
-                sendToResult(R.string.start_test);
-                doTest(socket);
-            }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 130 && resultCode == RESULT_OK) {
+            sendToResult(R.string.enable_bluetooth);
+            findAndConnectionBluetoothDevice = new FindAndConnectionBluetoothDevice(this);
+            findAndConnectionBluetoothDevice.setFindedListener(new FindAndConnectionBluetoothDevice.FindedListener() {
+                @Override
+                public void onStart() {
+                    sendToResult(R.string.start_search);
+                }
 
-            @Override
-            public void onStop() {
-                sendToResult(R.string.stop_search);
-            }
+                @Override
+                public void onConnected(BluetoothSocket socket) {
+                    sendToResult(R.string.start_test);
+                    doTest(socket);
+                }
 
-            @Override
-            public void onFailed() {
-                sendToResult(R.string.faild_find);
-            }
-        });
-        findAndConnectionBluetoothDevice.start();
+                @Override
+                public void onStop() {
+                    sendToResult(R.string.stop_search);
+                }
+
+                @Override
+                public void onFailed() {
+                    sendToResult(R.string.faild_find);
+                }
+            });
+            findAndConnectionBluetoothDevice.start();
+        } else if (resultCode == RESULT_CANCELED) {
+            sendToResult(R.string.enable_bluetooth_failed);
+        }
     }
 
     public void doTest(BluetoothSocket socket) {
@@ -122,6 +129,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                         baos.write(i);
                     }
                     String ret = new String(baos.toByteArray());
+                    Utils.Toast(ret);
                     baos.close();
                     return ret;
                 }
@@ -135,7 +143,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                             String line = doReadLine(is);
                             if (line.startsWith("W")) {
                                 fetchResult.setWeight(Float.parseFloat(line.substring(2, 7)));
-                                fetchResult.setHeight(Float.parseFloat(line.substring(9, 12)));
+                                fetchResult.setHeight(Float.parseFloat(line.substring(10, 15)));
                                 fetchedOne = true;
                             }
                             if (line.startsWith("B")) {
@@ -151,6 +159,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     sendToResult(fetchResult.toString());
                     sendToResult("体检完成");
+                    isTesting = false;
                 }
             };
 
@@ -187,10 +196,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             Integer integer = (Integer) v.getTag();
             try {
-                Toast.makeText(this, Const.jokes[integer], Toast.LENGTH_SHORT).show();
+                Utils.Toast(Const.jokes[integer]);
                 v.setTag(++integer);
             } catch (Exception e) {
-                e.printStackTrace();
                 v.setTag(0);
                 this.onClick(v);
             }
@@ -211,16 +219,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void sendToResult(final int strid) {
-        if (getMainLooper() == Looper.myLooper()) {
-            result.append(getResources().getString(strid) + "\n");
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    result.append(getResources().getString(strid) + "\n");
-                }
-            });
-        }
+        sendToResult(getString(strid));
     }
 
     @TargetApi(16)
@@ -253,7 +252,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bluetoothAdapter != null && !savedBluetoothState) {
+        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled() && !savedBluetoothState) {
+            if (bluetoothAdapter.isDiscovering())
+                bluetoothAdapter.cancelDiscovery();
             bluetoothAdapter.disable();
         }
     }
@@ -263,7 +264,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         if (isTesting) {
             exitDialog.show();
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 }
