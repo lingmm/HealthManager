@@ -100,11 +100,6 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                 public void onStop() {
                     sendToResult(R.string.stop_search);
                 }
-
-                @Override
-                public void onFailed() {
-                    sendToResult(R.string.faild_find);
-                }
             });
             findAndConnectionBluetoothDevice.start();
         } else if (resultCode == RESULT_CANCELED) {
@@ -129,7 +124,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                         baos.write(i);
                     }
                     String ret = new String(baos.toByteArray());
-                    Utils.Toast(ret);
+                    sendToResult(ret);
                     baos.close();
                     return ret;
                 }
@@ -138,7 +133,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                 public void run() {
                     boolean fetchedOne = false;//身高...
                     boolean fetchedTwo = false;//血压...
-                    while (!fetchedOne && !fetchedTwo) {
+                    while (true) {
                         try {
                             String line = doReadLine(is);
                             if (line.startsWith("W")) {
@@ -150,10 +145,16 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                                 fetchResult.setHbp(Integer.parseInt(line.substring(1, 4)));
                                 fetchResult.setLbp(Integer.parseInt(line.substring(4, 7)));
                                 fetchResult.setPulse(Integer.parseInt(line.substring(7, 10)));
+                                sendToResult("1-4:" + line.substring(1, 4));
+                                sendToResult("4-7:"+line.substring(4,7));
+                                sendToResult("7-10:"+line.substring(7,10));
                                 fetchedTwo = true;
                             }
+                            if(fetchedOne && fetchedTwo)
+                                break;
                         } catch (Exception e) {
-                            sendToResult("读取数据出错");
+                            e.printStackTrace();
+                            sendToResult("读取数据出错: "+ e.toString());
                             break;
                         }
                     }
@@ -166,7 +167,12 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
             os.write("11$".getBytes());
             os.flush();
             testReadThread.start();
-            textBtn.setText(R.string.abort);
+            textBtn.post(new Runnable() {
+                @Override
+                public void run() {
+                    textBtn.setText(R.string.abort);
+                }
+            });
             is.close();
             os.close();
         } catch (Exception e) {

@@ -80,9 +80,9 @@ public class TestRecord {
     @Override
     public String toString() {
         return  "高压:" + hbp +
-                ", 身高=" + height +
                 ", 低压=" + lbp +
                 ", 心率=" + pulse +
+                ", 身高=" + height +
                 ", 体重=" + weight;
     }
 }

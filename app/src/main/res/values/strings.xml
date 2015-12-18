@@ -14,7 +14,6 @@
     <string name="enable_bluetooth">打开蓝牙</string>
     <string name="start_search">开始搜索附近设备</string>
     <string name="stop_search">搜索结束</string>
-    <string name="faild_find">未能找到设备并连接,无法体检</string>
     <string name="start_test">设备已连接，开始体检</string>
     <string name="abort">中断</string>
     <string name="test_result">体检结束</string>
