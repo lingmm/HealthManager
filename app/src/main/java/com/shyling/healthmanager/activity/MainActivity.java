@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
         findViews();
 
         fragmentManager = getSupportFragmentManager();
-        fragments = new Fragment[3];
-        fragments[0] = new HistoryFragment();
-        fragments[1] = new TestFragment();
-        fragments[2] = new ChatFragment();
+        fragments = new Fragment[]{
+                new HistoryFragment(),
+                new TestFragment(),
+                new ChatFragment()
+        };
         FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {

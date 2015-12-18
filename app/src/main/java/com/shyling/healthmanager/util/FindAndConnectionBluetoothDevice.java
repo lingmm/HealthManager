@@ -40,7 +40,6 @@ public class FindAndConnectionBluetoothDevice extends Thread {
     public FindAndConnectionBluetoothDevice(final Context context) {
         this.testingActivity = (TestingActivity) context;
         bluetoothAdapter = this.testingActivity.bluetoothAdapter;
-        bluetoothDevices = new ArrayList<>();
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -59,10 +58,10 @@ public class FindAndConnectionBluetoothDevice extends Thread {
                                 }
                             }
                         }, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-                        testingActivity.sendToResult("尝试配对: "+device.getAddress());
+                        testingActivity.sendToResult("尝试配对: " + device.getAddress());
                         device.setPin("0000".getBytes());
-                        device.createBond();
                         device.setPairingConfirmation(false);
+                        device.createBond();
                     }
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(intent.getAction())) {
                     if (findedListener != null) {
@@ -86,6 +85,7 @@ public class FindAndConnectionBluetoothDevice extends Thread {
     }
 
     public void run() {
+        bluetoothAdapter.cancelDiscovery();
         Set<BluetoothDevice> bluetoothDevices = bluetoothAdapter.getBondedDevices();
         for (BluetoothDevice device : bluetoothDevices) {
             if (Const.DEVICENAME.equals(device.getName())) {
@@ -96,9 +96,11 @@ public class FindAndConnectionBluetoothDevice extends Thread {
                 }
             }
         }
-        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-        testingActivity.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        IntentFilter catchBluetoothFilter = new IntentFilter();
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        testingActivity.registerReceiver(broadcastReceiver, catchBluetoothFilter);
         bluetoothAdapter.startDiscovery();
     }
 

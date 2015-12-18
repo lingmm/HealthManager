@@ -199,7 +199,6 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                 Utils.Toast(Const.jokes[integer]);
                 v.setTag(++integer);
             } catch (Exception e) {
-                e.printStackTrace();
                 v.setTag(0);
                 this.onClick(v);
             }
