@@ -1,5 +1,6 @@
 package com.shyling.healthmanager.util;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.shyling.healthmanager.HealthManagerApplication;
@@ -26,7 +27,16 @@ public class Utils {
     }
 
     public static void Toast(int textid) {
-        Toast(HealthManagerApplication.healthManagerApplication.getString(textid));
+        Utils.Toast(HealthManagerApplication.healthManagerApplication.getString(textid));
+    }
+
+
+    public static void Log(Object o) {
+        if (o instanceof String) {
+            Log.d(Const.TAG, (String) o);
+        } else {
+            Log.d(Const.TAG, o.toString());
+        }
     }
 
 }

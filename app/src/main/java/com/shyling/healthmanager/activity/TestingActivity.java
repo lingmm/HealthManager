@@ -3,9 +3,13 @@ package com.shyling.healthmanager.activity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothSocket;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -13,56 +17,111 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.model.TestRecord;
 import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.FindAndConnectionBluetoothDevice;
+import com.shyling.healthmanager.util.TestAsyncTask;
 import com.shyling.healthmanager.util.Utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.lang.reflect.Method;
 
 import pl.droidsonroids.gif.GifImageView;
 
 /**
+ * 体检ing Activity
  * Created by shy on 2015/11/8.
  */
 
 public class TestingActivity extends AppCompatActivity implements View.OnClickListener {
-    // ActionBar actionBar;
+    private static final int REQUEST_ENABLE_BLUETOOTH = 130;
     GifImageView gifImageView;
     TextView textBtn, result;
     private AlertDialog exitDialog;
-    private boolean isTesting = false;
     public BluetoothAdapter bluetoothAdapter;
-    private BluetoothSocket socket;
-    private boolean savedBluetoothState = false;
-    private FindAndConnectionBluetoothDevice findAndConnectionBluetoothDevice;
-    private Thread testReadThread;
-    private TestRecord fetchResult;
+    private boolean savedBluetoothState = false, founded = false;
+    public boolean isTesting = false;
+
+    //2个HENU?不考虑
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(intent.getAction())) {
+                founded = false;
+                sendToResult("开始搜索设备");
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intent.getAction())) {
+                if (founded) {
+                    sendToResult("搜索完成");
+                } else {
+                    sendToResult("未搜索到设备");
+                }
+            } else if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (Const.DEVICENAME.equals(device.getName())) {
+                    founded = true;
+                    int state = device.getBondState();
+                    if (state == BluetoothDevice.BOND_NONE) {
+                        Utils.Toast("配对密码为:0000");
+                        if (Build.VERSION.SDK_INT >= 19) {
+                            device.createBond();
+                        } else {
+                            //API Level < 19使用反射调用
+                            try {
+                                Method createBond = BluetoothDevice.class.getMethod("createBond");
+                                createBond.setAccessible(true);
+                                createBond.invoke(device);
+                            } catch (Exception e) {
+                                //没方法就算了
+                            }
+                        }
+                    } else if (state == BluetoothDevice.BOND_BONDED) {
+                        connect(device);
+                    }
+                }
+            } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(intent.getAction())) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (Const.DEVICENAME.equals(device.getName())) {
+                    switch (device.getBondState()) {
+                        case BluetoothDevice.BOND_BONDED:
+                            connect(device);
+                            break;
+                        case BluetoothDevice.BOND_NONE:
+                            sendToResult("配对失败");
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    private void connect(BluetoothDevice device) {
+        isTesting = true;
+        TestAsyncTask testAsyncTask = new TestAsyncTask(this);
+        testAsyncTask.execute(device);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setIcon(R.mipmap.ic_launcher);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setTitle(check);
-        }*/
         setContentView(R.layout.activity_testing);
         findViews();
         bindListener();
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Utils.Toast(R.string.bluetooth_unavailable);
             finish();
             return;
         }
+
         savedBluetoothState = bluetoothAdapter.isEnabled();
-        doInit();
+
+        IntentFilter catchBluetoothFilter = new IntentFilter();
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        //其他原因引起的搜索设备暂时不管
+        registerReceiver(broadcastReceiver, catchBluetoothFilter);
+
+        checkBluetooth();
     }
 
     private void bindListener() {
@@ -70,144 +129,37 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         textBtn.setOnClickListener(this);
     }
 
-    private void doInit() {
+    private void checkBluetooth() {
         if (!bluetoothAdapter.isEnabled()) {
             Utils.Toast(R.string.ask_enable_bluetooth);
-            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 130);
+            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BLUETOOTH);
         } else {
-            onActivityResult(130, RESULT_OK, null);
+            onActivityResult(REQUEST_ENABLE_BLUETOOTH, RESULT_OK, null);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 130 && resultCode == RESULT_OK) {
-            sendToResult(R.string.enable_bluetooth);
-            findAndConnectionBluetoothDevice = new FindAndConnectionBluetoothDevice(this);
-            findAndConnectionBluetoothDevice.setFindedListener(new FindAndConnectionBluetoothDevice.FindedListener() {
-                @Override
-                public void onStart() {
-                    sendToResult(R.string.start_search);
-                }
-
-                @Override
-                public void onConnected(BluetoothSocket socket) {
-                    sendToResult(R.string.start_test);
-                    doTest(socket);
-                }
-
-                @Override
-                public void onStop() {
-                    sendToResult(R.string.stop_search);
-                }
-            });
-            findAndConnectionBluetoothDevice.start();
+        if (requestCode == REQUEST_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+            if (data != null) {
+                sendToResult(R.string.enable_bluetooth);
+            }
+            bluetoothAdapter.startDiscovery();
         } else if (resultCode == RESULT_CANCELED) {
             sendToResult(R.string.enable_bluetooth_failed);
         }
     }
 
-    public void doTest(BluetoothSocket socket) {
-        this.socket = socket;
-        isTesting = true;
-        fetchResult = new TestRecord();
-        final InputStream is;
-        OutputStream os;
-        try {
-            is = socket.getInputStream();
-            os = socket.getOutputStream();
-            testReadThread = new Thread() {
-                public String doReadLine(InputStream tmpis) throws IOException {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int i;
-                    while ((i = tmpis.read()) != '$') {
-                        baos.write(i);
-                    }
-                    String ret = new String(baos.toByteArray());
-                    sendToResult(ret);
-                    baos.close();
-                    return ret;
-                }
-
-                @Override
-                public void run() {
-                    boolean fetchedOne = false;//身高...
-                    boolean fetchedTwo = false;//血压...
-                    while (true) {
-                        try {
-                            String line = doReadLine(is);
-                            if (line.startsWith("W")) {
-                                fetchResult.setWeight(Float.parseFloat(line.substring(2, 7)));
-                                fetchResult.setHeight(Float.parseFloat(line.substring(10, 15)));
-                                fetchedOne = true;
-                            }
-                            if (line.startsWith("B")) {
-                                fetchResult.setHbp(Integer.parseInt(line.substring(1, 4)));
-                                fetchResult.setLbp(Integer.parseInt(line.substring(4, 7)));
-                                fetchResult.setPulse(Integer.parseInt(line.substring(7, 10)));
-                                sendToResult("1-4:" + line.substring(1, 4));
-                                sendToResult("4-7:"+line.substring(4,7));
-                                sendToResult("7-10:"+line.substring(7,10));
-                                fetchedTwo = true;
-                            }
-                            if(fetchedOne && fetchedTwo)
-                                break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            sendToResult("读取数据出错: "+ e.toString());
-                            break;
-                        }
-                    }
-                    sendToResult(fetchResult.toString());
-                    sendToResult("体检完成");
-                    isTesting = false;
-                }
-            };
-
-            os.write("11$".getBytes());
-            os.flush();
-            testReadThread.start();
-            textBtn.post(new Runnable() {
-                @Override
-                public void run() {
-                    textBtn.setText(R.string.abort);
-                }
-            });
-            is.close();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @TargetApi(16)
     @Override
     public void onClick(View v) {
-        if (isTesting && socket != null && socket.isConnected()) {
-            try {
-                textBtn.setText(R.string.test_result);
-                sendToResult(R.string.abort);
-                OutputStream os = socket.getOutputStream();
-                os.write("10$".getBytes());
-                os.flush();
-                if (socket != null && socket.isConnected()) {
-                    socket.close();
-                }
-                if (testReadThread.isAlive()) {
-                    testReadThread.interrupt();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            Integer integer = (Integer) v.getTag();
-            try {
-                Utils.Toast(Const.jokes[integer]);
-                v.setTag(++integer);
-            } catch (Exception e) {
-                v.setTag(0);
-                this.onClick(v);
-            }
+
+        Integer integer = (Integer) v.getTag();
+        try {
+            Utils.Toast(Const.jokes[integer]);
+            v.setTag(++integer);
+        } catch (Exception e) {
+            v.setTag(0);
+            this.onClick(v);
         }
     }
 
@@ -224,7 +176,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void sendToResult(final int strid) {
+    public void sendToResult(int strid) {
         sendToResult(getString(strid));
     }
 
@@ -238,13 +190,6 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         exitDialog = new AlertDialog.Builder(this).setMessage(getResources().getString(R.string.askexittest)).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (socket != null && socket.isConnected()) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
                 finish();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -263,6 +208,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
                 bluetoothAdapter.cancelDiscovery();
             bluetoothAdapter.disable();
         }
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override

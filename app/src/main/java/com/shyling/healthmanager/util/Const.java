@@ -19,4 +19,6 @@ public class Const {
             "够了够了，别点我了",
             "好吧，我受够了，不理你了"
     };
+
+    public static final String TAG = "healthmanager";
 }
