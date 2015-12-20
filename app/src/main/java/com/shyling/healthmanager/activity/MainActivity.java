@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         if (actionBar != null) {
-            //actionBar.setIcon(mipmap.ic_launcher);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
@@ -142,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.main_activity, menu);
-
         return true;
     }
 

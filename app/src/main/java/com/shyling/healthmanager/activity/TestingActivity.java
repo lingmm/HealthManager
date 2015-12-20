@@ -1,6 +1,5 @@
 package com.shyling.healthmanager.activity;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -180,7 +179,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         sendToResult(getString(strid));
     }
 
-    @TargetApi(16)
+
     private void findViews() {
         gifImageView = (GifImageView) findViewById(R.id.gifview);
         gifImageView.setImageResource(R.drawable.checking);
