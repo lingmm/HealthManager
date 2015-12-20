@@ -104,6 +104,14 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         findViews();
         bindListener();
 
+        IntentFilter catchBluetoothFilter = new IntentFilter();
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        //其他原因引起的搜索设备暂时不管
+        registerReceiver(broadcastReceiver, catchBluetoothFilter);
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Utils.Toast(R.string.bluetooth_unavailable);
@@ -112,14 +120,6 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         savedBluetoothState = bluetoothAdapter.isEnabled();
-
-        IntentFilter catchBluetoothFilter = new IntentFilter();
-        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
-        catchBluetoothFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        //其他原因引起的搜索设备暂时不管
-        registerReceiver(broadcastReceiver, catchBluetoothFilter);
 
         checkBluetooth();
     }
