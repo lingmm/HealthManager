@@ -65,6 +65,7 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
             is = socket.getInputStream();
             os = socket.getOutputStream();
             os.write("11$".getBytes());
+            os.flush();
             Thread thread = new Thread(this);
             thread.start();
             thread.join();
