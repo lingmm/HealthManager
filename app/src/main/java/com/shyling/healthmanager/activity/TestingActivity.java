@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -37,6 +38,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     public BluetoothAdapter bluetoothAdapter;
     private boolean savedBluetoothState = false, founded = false;
     public boolean isTesting = false;
+    private TestAsyncTask testAsyncTask;
 
     //2个HENU?不考虑
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -92,7 +94,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void connect(BluetoothDevice device) {
         isTesting = true;
-        TestAsyncTask testAsyncTask = new TestAsyncTask(this);
+        testAsyncTask = new TestAsyncTask(this);
         testAsyncTask.execute(device);
     }
 
@@ -108,7 +110,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         catchBluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         catchBluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
         catchBluetoothFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        //其他原因引起的搜索设备暂时不管
+        //其他原因引起的搜索设备导致的开始体检暂时不管
         registerReceiver(broadcastReceiver, catchBluetoothFilter);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -120,6 +122,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
 
         savedBluetoothState = bluetoothAdapter.isEnabled();
 
+        //only start at onCreate
         checkBluetooth();
     }
 
@@ -162,6 +165,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /*
+    Send to TextView,whether threads.
+     */
     public void sendToResult(final String str) {
         if (getMainLooper() == Looper.myLooper()) {
             result.append(str + "\n");
@@ -175,6 +181,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /*
+    @see #sendToResult(String)
+     */
     public void sendToResult(int strid) {
         sendToResult(getString(strid));
     }
@@ -202,6 +211,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(testAsyncTask!=null && testAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
+            testAsyncTask.cancel(true);
+        }
         if (bluetoothAdapter != null && bluetoothAdapter.isEnabled() && !savedBluetoothState) {
             if (bluetoothAdapter.isDiscovering())
                 bluetoothAdapter.cancelDiscovery();

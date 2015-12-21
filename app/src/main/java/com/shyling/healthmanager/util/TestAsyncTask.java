@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 异步体检
@@ -24,10 +26,13 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     OutputStream os;
     BluetoothSocket socket;
     TestRecord record;
+    Pattern patternOne,patternTwo;
 
     public TestAsyncTask(TestingActivity context) {
         this.context = context;
         record = new TestRecord();
+        patternOne = Pattern.compile("W:([\\d\\.]{5}) H:([\\d\\.]{5})");
+        patternTwo = Pattern.compile("B(\\d{3})(\\d{3})(\\d{3})");
     }
 
     @Override
@@ -45,6 +50,7 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     protected void onCancelled() {
         super.onCancelled();
         try {
+            os.write("10$".getBytes());
             if (is != null) {
                 is.close();
             }
@@ -55,15 +61,15 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
                 socket.close();
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            Utils.Log(ioe);
         }
-        Utils.Toast("取消");
+        Utils.Toast("取消体检");
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Utils.Toast("开始");
+        Utils.Toast("请根据语音提示开始体检");
     }
 
     @Override
@@ -72,8 +78,8 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
             device = params[0];
         }
         try {
-            socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
             context.bluetoothAdapter.cancelDiscovery();
+            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
             socket.connect();
             is = socket.getInputStream();
             os = socket.getOutputStream();
@@ -84,9 +90,16 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
             thread.join();
             return record;
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            publishProgress(e.toString());
+            Utils.Log(e);
             return null;
+        } finally {
+            try {
+                is.close();
+                os.close();
+                socket.close();
+            } catch (IOException e) {
+                //didn't matter,pass
+            }
         }
     }
 
@@ -103,7 +116,8 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
         if (values[0] != null) {
-            Utils.Toast(values[0]);
+//            Utils.Toast(values[0]);
+            context.sendToResult(values[0]);
         }
     }
 
@@ -111,29 +125,28 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     public void run() {
         try {
             boolean fetchOne = false, fetchTwo = false;
-            while (true) {
+            while (!fetchOne  && !fetchTwo ) {
                 if (isCancelled()) {
                     return;
                 }
-                if (fetchOne && fetchTwo) {
-                    break;
-                } else {
-                    String line = readLine();
-                    if (line.startsWith("W")) {
-                        record.setWeight(Float.parseFloat(line.substring(2, 7)));
-                        record.setHeight(Float.parseFloat(line.substring(10, 15)));
-                        fetchOne = true;
-                    }
-                    if (line.startsWith("B")) {
-                        record.setHbp(Integer.parseInt(line.substring(1, 4)));
-                        record.setLbp(Integer.parseInt(line.substring(4, 7)));
-                        record.setPulse(Integer.parseInt(line.substring(7, 10)));
-                        fetchTwo = true;
-                    }
+                String line = readLine();
+                //match result by regex
+                Matcher matcherOne = patternOne.matcher(line);
+                Matcher matcherTwo = patternTwo.matcher(line);
+                if(matcherOne.find()){
+                    record.setWeight(Float.parseFloat(matcherOne.group(1)));
+                    record.setHeight(Float.parseFloat(matcherOne.group(2)));
+                    fetchOne = true;
+                }
+                if(matcherTwo.find()){
+                    record.setHbp(Integer.parseInt(matcherTwo.group(1)));
+                    record.setLbp(Integer.parseInt(matcherTwo.group(2)));
+                    record.setPulse(Integer.parseInt(matcherTwo.group(3)));
+                    fetchTwo = true;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Utils.Log(e);
             publishProgress(e.toString());
         }
     }
