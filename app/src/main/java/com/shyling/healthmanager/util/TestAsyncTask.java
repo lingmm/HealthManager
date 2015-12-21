@@ -44,6 +44,19 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     @Override
     protected void onCancelled() {
         super.onCancelled();
+        try {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+            if (socket != null && socket.isConnected()) {
+                socket.close();
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         Utils.Toast("取消");
     }
 
@@ -122,23 +135,6 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
         } catch (IOException e) {
             e.printStackTrace();
             publishProgress(e.toString());
-        }
-    }
-
-    @Override
-    protected void onCancelled(TestRecord testRecord) {
-        try {
-            if (is != null) {
-                is.close();
-            }
-            if (os != null) {
-                os.close();
-            }
-            if (socket != null && socket.isConnected()) {
-                socket.close();
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
         }
     }
 }
