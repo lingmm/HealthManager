@@ -52,9 +52,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.tv_logon:
                 //登录跳转
+                finish();
                 intent = new Intent();
-                intent.setClass(this,LoginActivity.class);
+                intent.setClass(this, LoginActivity.class);
                 startActivity(intent);
+
         }
     }
 }

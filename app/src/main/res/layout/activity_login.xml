@@ -28,8 +28,9 @@
                 android:id="@+id/tv_name"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="账号："
-                android:textSize="25sp"/>
+                android:layout_marginTop="5dp"
+                android:text="账 号："
+                android:textSize="23sp"/>
             <EditText
                 android:id="@+id/ed_number"
                 android:layout_height="40dp"
@@ -51,8 +52,9 @@
                 android:id="@+id/tv_pwd"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textSize="25sp"
-                android:text="密码："/>
+                android:layout_marginTop="5dp"
+                android:textSize="23sp"
+                android:text="密 码："/>
             <EditText
                 android:id="@+id/ed_password"
                 android:layout_height="40dp"
@@ -63,28 +65,37 @@
                 android:background="@null"/>
         </RelativeLayout>
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="登录"
-        android:textSize="15sp"
-        android:textColor="#fff"
         android:layout_below="@+id/layout"
-        android:layout_toLeftOf="@+id/iv_head"
-        android:layout_toStartOf="@+id/iv_head" />
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="注册"
-        android:textSize="15sp"
-        android:textColor="#fff"
-        android:layout_below="@+id/layout"
-        android:layout_toRightOf="@+id/iv_head"
-        android:layout_toEndOf="@+id/iv_head" />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="7.5dp"
+            android:background="@drawable/shape"
+            android:text="登录"
+            android:textSize="15sp"
+            android:textColor="#fff" />
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="7.5dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape"
+            android:text="注册"
+            android:textSize="15sp"
+            android:textColor="#fff" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_forget_pwd"
         android:layout_width="wrap_content"

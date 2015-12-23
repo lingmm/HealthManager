@@ -1,15 +1,21 @@
 package com.shyling.healthmanager.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.shyling.healthmanager.HealthManagerApplication;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shy on 2015/11/8.
  */
 public class Utils {
     private static Toast toast;
+    static SharedPreferences data;
 
     /*
     Toast
@@ -37,6 +43,25 @@ public class Utils {
         } else {
             Log.d(Const.TAG, o.toString());
         }
+    }
+    //保存账号密码
+    public static boolean saveUser(Context context,String userName,String passWd){
+        data = context.getSharedPreferences("info",Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = data.edit();
+        edit.putString("_userNumber",userName);
+        edit.putString("_passWd", passWd);
+        edit.commit();
+        return true;
+    }
+    //读取账号密码
+    public static Map<String,String> getUser(Context context){
+        data = context.getSharedPreferences("info",Context.MODE_PRIVATE);
+        String userName = data.getString("_userNumber",null);
+        String passWd = data.getString("_passWd",null);
+        Map<String,String> userMap = new HashMap<String,String>();
+        userMap.put("_userNumber",userName);
+        userMap.put("_passWd",passWd);
+        return userMap;
     }
 
 }

@@ -15,21 +15,18 @@
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/history"
-            android:background="#12ca83"
             android:src="@drawable/history"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/test"
-            android:background="#12ca83"
             android:src="@drawable/index"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/chat"
-            android:background="#12ca83"
             android:src="@drawable/chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

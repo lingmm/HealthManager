@@ -17,12 +17,15 @@ import android.widget.Toast;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
+import com.shyling.healthmanager.util.Utils;
+
+import java.util.Map;
 
 /**
  * Created by Mars on 2015/11/3.
  */
 public class LoginActivity extends Activity implements View.OnClickListener {
-    EditText ed_Username;
+    EditText ed_Number;
     EditText ed_Password;
     Button btn_Login;
     Button btn_register;
@@ -34,13 +37,22 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ed_Username = (EditText) findViewById(R.id.ed_number);
+        initView();
+        Map<String,String> userMap = Utils.getUser(this);
+        if (userMap!=null){
+            ed_Number.setText(userMap.get("_userNumber"));
+            ed_Password.setText(userMap.get("_passWd"));
+        }
+    }
+
+    private void initView() {
+        ed_Number = (EditText) findViewById(R.id.ed_number);
         ed_Password = (EditText) findViewById(R.id.ed_password);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.showSoftInput(ed_Username,0);
+                manager.showSoftInput(ed_Number,0);
                 manager.showSoftInput(ed_Password,0);
             }
         },1000);
@@ -52,21 +64,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         tv_forget_pwd = (TextView) findViewById(R.id.tv_forget_pwd);
         tv_forget_pwd.setOnClickListener(LoginActivity.this);
     }
-    //	监听onTouchEvent事件，关闭软键盘。
-    //	getWindow().getDecorView()的意思是获取window的最前面的view。软键盘是phonewindow的跟view
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-    //			关闭软键盘
-        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(getWindow().getDecorView()
-                .getWindowToken(), 0);
-        return super.onTouchEvent(event);
-    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_login :
                 processLogin();
+                finish();
                 break;
             case R.id.tv_forget_pwd :
                 intent = new Intent();
@@ -82,21 +86,18 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     private void processLogin() {
-        final String userName = ed_Username.getText().toString();
+        final String userNumber = ed_Number.getText().toString();
         final String passWd = ed_Password.getText().toString();
-        if(TextUtils.isEmpty(userName)){
+        if(TextUtils.isEmpty(userNumber)){
             Toast.makeText(this, "请输入账号", Toast.LENGTH_SHORT).show();
         }else if(TextUtils.isEmpty(passWd)){
             Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
-        }else if(userDao.find(userName) == null){
+        }else if(userDao.find(userNumber) == null){
             Toast.makeText(this, "用户不存在", Toast.LENGTH_SHORT).show();
-        }else if(userDao.find(userName).getPassWd().equals(passWd)){
+        }else if(userDao.find(userNumber).getPassWd().equals(passWd)){
             //登陆成功
             //保存登录的用户名
-            SharedPreferences sharedPreferences = getSharedPreferences("info",0);
-            SharedPreferences.Editor editor =sharedPreferences.edit();
-            editor.putString("_username",userName);
-            editor.commit();
+            boolean isSaveSuccess = Utils.saveUser(this,userNumber,passWd);
             Toast.makeText(this, "登陆成功", Toast.LENGTH_SHORT).show();
             intent = new Intent();
             intent.setClass(LoginActivity.this, MainActivity.class);

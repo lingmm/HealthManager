@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == id.about) {
             getAboutDialog().show();
         } else if (itemId == id.exit) {
-            finish();
+            System.exit(0);//退出app
         } else if (itemId == id.setting) {
             startActivity(new Intent(this, SettingActivity.class));
         }

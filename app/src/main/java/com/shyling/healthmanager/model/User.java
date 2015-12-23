@@ -5,11 +5,15 @@ package com.shyling.healthmanager.model;
  */
 public class User {
     private String userName;
+    private String userNumber;
     private String passWd;
     private String uName;
     private String birthDay;
     private String cellPhone;
-
+    public String getUserNumber(){ return userNumber;}
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
+    }
     public String getCellPhone() {
         return cellPhone;
     }
@@ -50,8 +54,9 @@ public class User {
         this.birthDay = birthDay;
     }
 
-    public User(String userName,  String uName, String birthDay, String cellPhone) {
+    public User(String userName, String userNumber, String uName, String birthDay, String cellPhone) {
         this.userName = userName;
+        this.userNumber = userNumber;
         this.uName = uName;
         this.birthDay = birthDay;
         this.cellPhone = cellPhone;
