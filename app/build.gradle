@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -28,4 +34,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile files('libs/easemobchat_2.2.5.jar')
 }
