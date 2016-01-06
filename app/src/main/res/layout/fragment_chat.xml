@@ -9,8 +9,9 @@
     android:orientation="vertical">
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView" />
+            android:layout_height="441dp"
+            android:id="@+id/listView"
+            android:layout_weight="5.10"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -22,26 +23,29 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="1">
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="225dp"
+                android:layout_width="355dp"
                 android:layout_height="54dp"
-                android:layout_marginLeft="15dp">
+                android:layout_marginLeft="15dp"
+                android:weightSum="1">
 
                 <EditText
-            android:layout_width="match_parent"
+            android:layout_width="113dp"
             android:layout_height="wrap_content"
-            android:id="@+id/massage" />
-        </LinearLayout>
+            android:id="@+id/et_massage"
+            android:layout_weight="0.88"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="留言"
-            android:id="@+id/btn_sendMag"
-            android:layout_marginLeft="15dp" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="留言"
+                    android:id="@+id/btn_sendMag"
+                    android:layout_marginLeft="15dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

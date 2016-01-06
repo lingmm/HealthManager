@@ -9,4 +9,7 @@
     <color name="gray">#ccc</color>
     <color name="testing_background">#66CEFF</color>
     <color name="light_gray">#eee</color>
+
+    <!--chat中的颜色-->
+    <color name="btn_gray_normal">#c0c0c0</color>
 </resources>
