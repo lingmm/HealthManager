@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:henu="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <com.shyling.healthmanager.activity.SettingItemView
+    <com.shyling.healthmanager.view.SettingItemView
         android:id="@+id/siv_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         style="@style/UnderLine" />
-    <com.shyling.healthmanager.activity.SettingItemView
+    <com.shyling.healthmanager.view.SettingItemView
         android:id="@+id/siv_push"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

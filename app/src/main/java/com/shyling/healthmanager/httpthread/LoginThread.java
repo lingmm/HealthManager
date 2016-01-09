@@ -1,4 +1,4 @@
-package com.shyling.healthmanager.model;
+package com.shyling.healthmanager.httpthread;
 
 import android.os.Handler;
 import android.os.Message;

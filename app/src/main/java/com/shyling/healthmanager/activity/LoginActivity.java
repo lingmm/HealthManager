@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
-import com.shyling.healthmanager.model.LoginThread;
+import com.shyling.healthmanager.httpthread.LoginThread;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
@@ -36,6 +36,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             switch (msg.what) {
                 case Const.LOGINSUCCESS:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
                     boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
                     Utils.Toast("登陆成功");
                     break;
@@ -52,6 +53,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 default:
                     break;
             }
+            finish();
         }
     };
 
@@ -141,29 +143,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         } else {
             //输入无误
             new LoginThread(userNumber, passWd, handler).start();
-            /*String path = "http://10.0.2.2:8080/web2/LoginServlet";
-            RequestParams params = new RequestParams();
-            params.addBodyParameter("name", userNumber);
-            params.addBodyParameter("pass", passWd);
-            HttpUtils http = new HttpUtils();
-            http.send(HttpRequest.HttpMethod.POST, path, new RequestCallBack<String>() {
-
-                @Override
-                public void onFailure(HttpException error, String msg) {
-                    Utils.Toast(msg);
-                    error.printStackTrace();
-
-                }
-
-                @Override
-                public void onSuccess(ResponseInfo<String> info) {
-                    String result = info.result;
-                    System.out.println("result" + result);
-                    Utils.Toast(result);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                }
-            });*/
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }

@@ -1,4 +1,4 @@
-package com.shyling.healthmanager.activity;
+package com.shyling.healthmanager.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

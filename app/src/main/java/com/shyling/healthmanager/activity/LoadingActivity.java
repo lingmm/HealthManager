@@ -15,7 +15,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 //        初始化环信sdk
-        EMChat.getInstance().init(this);
+//        EMChat.getInstance().init(this);
 
         setContentView(R.layout.loading_activity);
         new Handler().postDelayed(new Runnable() {

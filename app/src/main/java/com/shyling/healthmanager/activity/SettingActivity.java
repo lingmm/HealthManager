@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.view.SettingItemView;
 
 /**
  * Created by Mars on 2015/11/3.
@@ -50,8 +51,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.tv_logon:
-                //注销跳转
-                startActivity(new Intent(this, LoginActivity.class));
+                //注销
+                //startActivity(new Intent(this, LoginActivity.class));
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
