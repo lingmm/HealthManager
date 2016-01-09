@@ -8,9 +8,12 @@ package com.shyling.healthmanager.util;
 public class Const {
     public static final String DBNAME = "health.db";
     public static final int DBVERSION = 1;
+    public static final int LOGINSUCCESS = 6;
+    public static final int LOGINERROR = -1;
+    public static final int URLERROR = -2;
+    public static final int NETERROR = -3;
     public static final String DEVICENAME = "HENU";
-    public static final String USERNAME_COLUMN = "username";
-    public static final String PASSWORD_COLUMN = "password";
+    public static final String path = "http://10.0.2.2:8080/";
 
     public static final String[] jokes = new String[]{
             "你好",

@@ -1,29 +1,21 @@
 package com.shyling.healthmanager.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.util.DBHelper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Mars on 2015/11/3.
  */
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
-    LinearLayout tv_person;
-    LinearLayout tv_logon;
+    LinearLayout tv_logon,tv_person;
+    private SettingItemView sivUpdate,sivPush;
+    SharedPreferences spf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,28 +27,69 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         setContentView(R.layout.activity_setting);
+        spf = getSharedPreferences("info",MODE_PRIVATE);
+        sivUpdate = (SettingItemView) findViewById(R.id.siv_update);
+        //sivUpdate.setTitle("自动更新设置");
+        boolean autoUpdate = spf.getBoolean("auto_update",true);
+        JudgeCheck(autoUpdate,sivUpdate);
+        sivPush = (SettingItemView) findViewById(R.id.siv_push);
+        boolean autoPush = spf.getBoolean("auto_push",true);
+        JudgeCheck(autoPush, sivPush);
         tv_person = (LinearLayout) findViewById(R.id.tv_person);
+        //tv_person.setVisibility(View.GONE);
         tv_person.setOnClickListener(this);
         tv_logon = (LinearLayout) findViewById(R.id.tv_logon);
         tv_logon.setOnClickListener(this);
     }
     @Override
     public void onClick(View v) {
-        Intent intent;
         switch (v.getId()){
             case R.id.tv_person:
                 //个人资料
-                intent = new Intent();
-                intent.setClass(this, PersonActivity.class);//指定类名
-                startActivity(intent);
+                startActivity(new Intent(this, PersonActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.tv_logon:
-                //登录跳转
+                //注销跳转
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
-                intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
-                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                break;
+            case R.id.siv_update:
+                if (sivUpdate.isChecked()){
+                    sivUpdate.setCheck(false);
+                    //sivUpdate.setDesc("自动更新已经关闭");
+                    //更新spf
+                    spf.edit().putBoolean("auto_update",false).commit();
+                }else {
+                    sivUpdate.setCheck(true);
+                    //sivUpdate.setDesc("自动更新已经开启");
+                    spf.edit().putBoolean("auto_update",true).commit();
+                }
+                break;
+            case R.id.siv_push:
+                if (sivPush.isChecked()){
+                    sivPush.setCheck(false);
+                    //sivUpdate.setDesc("自动更新已经关闭");
+                    //更新spf
+                    spf.edit().putBoolean("auto_push",false).commit();
+                }else {
+                    sivPush.setCheck(true);
+                    //sivUpdate.setDesc("自动更新已经开启");
+                    spf.edit().putBoolean("auto_push",true).commit();
+                }
+                break;
 
+        }
+    }
+    private void JudgeCheck(boolean auto,SettingItemView settingItemView){
+        settingItemView.setOnClickListener(this);
+        if (auto) {
+            //sivUpdate.setDesc("自动更新已经开启");
+            settingItemView.setCheck(true);
+        }else {
+            //sivUpdate.setDesc("自动更新已经关闭");
+            settingItemView.setCheck(false);
         }
     }
 }

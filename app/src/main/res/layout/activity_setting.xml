@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:henu="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <LinearLayout
-        android:id="@+id/tv_person"
+    <com.shyling.healthmanager.activity.SettingItemView
+        android:id="@+id/siv_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        henu:tvTitle="自动更新"
+        henu:desc_on="自动更新已开启"
+        henu:desc_off="自动更新已关闭"/>
+    <LinearLayout
+        android:layout_marginLeft="15dp"
+        android:id="@+id/tv_person"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical">
         <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:text="用户资料"
             android:textSize="20sp"/>
     </LinearLayout>
-    <TextView style="@style/UnderLine" />
-    <RelativeLayout
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        style="@style/UnderLine" />
+    <com.shyling.healthmanager.activity.SettingItemView
+        android:id="@+id/siv_push"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="消息推送"
-            android:textSize="20sp"
-            android:id="@+id/tv_news" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_news"
-            android:layout_marginRight="15dp"
-            android:checked="true"
-            android:layout_alignTop="@+id/tv_news"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            tools:targetApi="ice_cream_sandwich" />
-    </RelativeLayout>
-    <TextView style="@style/UnderLine" />
+        henu:tvTitle="消息推送"
+        henu:desc_on="消息推送已开启"
+        henu:desc_off="消息推送已关闭"/>
     <LinearLayout
         android:id="@+id/tv_logon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="horizontal">
         <TextView
             android:layout_marginLeft="20dp"
@@ -55,5 +49,8 @@
             android:text="注销登陆"
             android:textSize="20sp"/>
     </LinearLayout>
-    <TextView style="@style/UnderLine" />
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        style="@style/UnderLine" />
 </LinearLayout>
