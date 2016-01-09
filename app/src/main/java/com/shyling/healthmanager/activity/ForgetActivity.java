@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.httpthread.ForgetThread;
+import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
 
@@ -23,6 +27,25 @@ import com.shyling.healthmanager.util.Utils;
  */
 public class ForgetActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Const.LOGINSUCCESS:
+                    startActivity(new Intent(ForgetActivity.this, LoginActivity.class));
+                    Utils.Toast("修改密码成功");
+                    break;
+                case Const.URLERROR:
+                    Utils.Toast("地址错误");
+                    break;
+                case Const.NETERROR:
+                    Utils.Toast("网络异常");
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +70,8 @@ public class ForgetActivity extends AppCompatActivity {
                             Toast.makeText(ForgetActivity.this, "两次输入密码不一样!", Toast.LENGTH_LONG).show();
                             return;
                     } else {
-                        sharedPreferences = getSharedPreferences("infopasswd", 0);
+                        //本地
+                        /*sharedPreferences = getSharedPreferences("infopasswd", 0);
                         DBHelper dbHelper = new DBHelper(ForgetActivity.this, "tb_userinfo.db", null, 1);
                         SQLiteDatabase database = dbHelper.getWritableDatabase();
                         ContentValues values = new ContentValues();
@@ -58,7 +82,11 @@ public class ForgetActivity extends AppCompatActivity {
                         Intent intent = new Intent();
                         intent.setClass(ForgetActivity.this, LoginActivity.class);
                         startActivity(intent);
-                        finish();
+                        finish();*/
+
+                        //网络
+                        new ForgetThread(passWd, handler).start();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 }
             });

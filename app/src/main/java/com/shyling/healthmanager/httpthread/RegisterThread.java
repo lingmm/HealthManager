@@ -6,10 +6,8 @@ import android.os.Message;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -17,13 +15,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 /**
- * 登录线程
+ * 注册线程
  * Created by Mars on 2015/12/29.
  */
-public class LoginThread extends Thread {
+
+public class RegisterThread extends Thread {
     private String ed_Number,ed_Password;
     private Handler handler;
-    public LoginThread(String ed_Number, String ed_Password, Handler handler){
+    public RegisterThread(String ed_Number, String ed_Password, Handler handler){
         this.ed_Number = ed_Number;
         this.ed_Password = ed_Password;
         this.handler = handler;
@@ -33,7 +32,7 @@ public class LoginThread extends Thread {
         HttpURLConnection conn = null;
         //提交的数据需要经过url编码，英文和数字编码后不变
         try {
-            URL url = new URL(Const.path+"web2/LoginServlet");
+            URL url = new URL(Const.path+"web2/RegisterServlet");
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);

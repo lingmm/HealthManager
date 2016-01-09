@@ -36,12 +36,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             switch (msg.what) {
                 case Const.LOGINSUCCESS:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
                     boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
                     Utils.Toast("登陆成功");
+                    finish();
                     break;
                 case Const.LOGINERROR:
-                    Utils.Toast("登陆失败");
+                    Utils.Toast("用户不存在！！！");
                     break;
                 case Const.URLERROR:
                     Utils.Toast("地址错误");
@@ -49,11 +49,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 case Const.NETERROR:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     Utils.Toast("网络异常");
+                    finish();
                     break;
                 default:
                     break;
             }
-            finish();
+
         }
     };
 
@@ -101,6 +102,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_register:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
         }

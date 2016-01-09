@@ -37,7 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_name"
-                android:background="@null"/>
+                android:background="@null"
+                android:hint="手 机 号"
+                android:textSize="20sp"/>
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -62,7 +64,9 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_pwd"
                 android:inputType="textPassword"
-                android:background="@null"/>
+                android:background="@null"
+                android:hint="密 码"
+                android:textSize="20sp"/>
         </RelativeLayout>
     </LinearLayout>
 
