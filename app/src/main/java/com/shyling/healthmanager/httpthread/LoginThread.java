@@ -33,7 +33,8 @@ public class LoginThread extends Thread {
         HttpURLConnection conn = null;
         //提交的数据需要经过url编码，英文和数字编码后不变
         try {
-            URL url = new URL(Const.path+"web2/LoginServlet");
+            //URL url = new URL(Const.path+"health/dwz/mLogin_login");
+            URL url = new URL("http://192.168.6.35:8080/health/dwz/mLogin_login");
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);
@@ -53,7 +54,7 @@ public class LoginThread extends Thread {
             if(conn.getResponseCode() == 200){
                 InputStream is = conn.getInputStream();
                 String text = Utils.readInputStream(is);
-                if ("SUCESS".equals(text)) {
+                if ("SUCCESS".equals(text)) {
                     msg.what = Const.LOGINSUCCESS;
                 }else if ("ERROR".equals(text)){
                     msg.what = Const.LOGINERROR;
