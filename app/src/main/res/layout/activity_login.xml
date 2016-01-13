@@ -38,6 +38,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_name"
                 android:background="@null"
+                android:singleLine="true"
+                android:inputType="phone"
                 android:hint="手 机 号"
                 android:textSize="20sp"/>
         </RelativeLayout>
@@ -64,6 +66,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_pwd"
                 android:inputType="textPassword"
+                android:singleLine="true"
                 android:background="@null"
                 android:hint="密 码"
                 android:textSize="20sp"/>

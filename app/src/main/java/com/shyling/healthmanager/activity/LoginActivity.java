@@ -36,7 +36,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             switch (msg.what) {
                 case Const.LOGINSUCCESS:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
+                    //boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
                     Utils.Toast("登陆成功");
                     finish();
                     break;
@@ -48,13 +48,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     break;
                 case Const.NETERROR:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
                     Utils.Toast("网络异常");
                     finish();
                     break;
                 default:
                     break;
             }
-
+            boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
         }
     };
 

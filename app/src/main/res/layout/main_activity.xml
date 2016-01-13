@@ -11,24 +11,23 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="55dp">
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/history"
-            android:background="@color/colorPrimary"
-            android:src="@drawable/newscenter"
+            android:src="@drawable/ic_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/test"
-            android:src="@drawable/home"
+            android:src="@drawable/ic_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <ImageButton
             android:layout_weight="1"
             android:id="@+id/chat"
-            android:src="@drawable/govaffairs"
+            android:src="@drawable/ic_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

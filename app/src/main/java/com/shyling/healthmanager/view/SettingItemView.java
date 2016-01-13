@@ -19,9 +19,9 @@ import com.shyling.healthmanager.R;
  */
 public class SettingItemView extends RelativeLayout {
     private static final String NAMESPACE = "http://schemas.android.com/apk/res-auto";
-    TextView tvTitle, tvDesc;
-    String mTitle, mDesc_on, mDesc_off;
-    Switch stStatus;
+    private TextView tvTitle, tvDesc;
+    private String mTitle, mDesc_on, mDesc_off;
+    private Switch stStatus;
 
     //有new 对象时调用此方法
     public SettingItemView(Context context) {
