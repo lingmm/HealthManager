@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_chat);
 
-        toChatUserName = getIntent().getStringExtra("userId");
+//        toChatUserName = getIntent().getStringExtra("userId");
         listView = (ListView) findViewById(R.id.listView);
         et_message = (EditText) findViewById(R.id.et_massage);
         btn_send = (Button) findViewById(R.id.btn_sendMag);
@@ -89,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
                 message.setReceipt(toChatUserName);
                 //把消息加入到此会话对象中
                 conversation.addMessage(message);
+
                 adapter.notifyDataSetChanged();
                 listView.setAdapter(adapter);
                 listView.setSelection(listView.getCount() - 1);
@@ -189,7 +190,7 @@ public class ChatActivity extends AppCompatActivity {
                 TextView textViewContent = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                 textViewContent.setText(body.getMessage());
             }
-            return null;
+            return convertView;
         }
     }
 
