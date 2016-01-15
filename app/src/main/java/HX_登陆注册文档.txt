@@ -1,5 +1,5 @@
 
-！！！使用时需要导入环信sdk中的包！！！
+！！！使用时需要导入环信sdk的包！！！
 
 ###环信登陆方法###
 EMChatManager.getInstance().login(userName,password,new EMCallBack() {//回调
