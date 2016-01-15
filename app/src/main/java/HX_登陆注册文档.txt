@@ -1,0 +1,47 @@
+
+！！！使用时需要导入环信sdk中的包！！！
+
+###环信登陆方法###
+EMChatManager.getInstance().login(userName,password,new EMCallBack() {//回调
+	@Override
+	public void onSuccess() {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				EMGroupManager.getInstance().loadAllGroups();
+				EMChatManager.getInstance().loadAllConversations();
+				Log.d("main", "登陆聊天服务器成功！");
+			}
+		});
+	}
+
+	@Override
+	public void onProgress(int progress, String status) {
+
+	}
+
+	@Override
+	public void onError(int code, String message) {
+		Log.d("main", "登陆聊天服务器失败！");
+	}
+});
+
+###环信注册方法###
+new Thread(new Runnable() {
+    public void run() {
+      try {
+         // 调用sdk注册方法
+         EMChatManager.getInstance().createAccountOnServer(username, pwd);
+      } catch (final EaseMobException e) {
+      //注册失败
+		int errorCode=e.getErrorCode();
+		if(errorCode==EMError.NONETWORK_ERROR){
+		    Toast.makeText(getApplicationContext(), "网络异常，请检查网络！", Toast.LENGTH_SHORT).show();
+		}else if(errorCode==EMError.USER_ALREADY_EXISTS){
+		    Toast.makeText(getApplicationContext(), "用户已存在！", Toast.LENGTH_SHORT).show();
+		}else if(errorCode==EMError.UNAUTHORIZED){
+			Toast.makeText(getApplicationContext(), "注册失败，无权限！", Toast.LENGTH_SHORT).show();
+		}else{
+			Toast.makeText(getApplicationContext(), "注册失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+      }
+   }
+}).start();
