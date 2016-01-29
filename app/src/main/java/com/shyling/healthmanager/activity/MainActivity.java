@@ -16,8 +16,8 @@ import android.widget.ImageButton;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.fragment.ChatFragment;
+import com.shyling.healthmanager.fragment.CheckUpFragment;
 import com.shyling.healthmanager.fragment.HistoryFragment;
-import com.shyling.healthmanager.fragment.TestFragment;
 import com.shyling.healthmanager.util.Utils;
 
 import static com.shyling.healthmanager.R.color;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         fragments = new Fragment[]{
                 new HistoryFragment(),
-                new TestFragment(),
+                new CheckUpFragment(),
                 new ChatFragment()
         };
         FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(fragmentManager) {
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         history = (ImageButton) findViewById(id.history);
         test = (ImageButton) findViewById(id.test);
         chat = (ImageButton) findViewById(id.chat);
-//        testFragment = new TestFragment();
+//        testFragment = new CheckUpFragment();
 //        historyFragment = new HistoryFragment();
 //        chatFragment = new ChatFragment();
     }

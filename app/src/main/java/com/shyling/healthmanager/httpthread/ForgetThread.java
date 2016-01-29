@@ -68,7 +68,6 @@ public class ForgetThread extends Thread {
                 conn.disconnect();
             }
         }
-
     }
 
     @Override

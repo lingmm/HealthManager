@@ -1,9 +1,6 @@
 package com.shyling.healthmanager.fragment;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.activity.TestingActivity;
-import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.DBHelper;
+import com.shyling.healthmanager.activity.CheckUpActivity;
 
-public class TestFragment extends Fragment implements View.OnClickListener{
+public class CheckUpFragment extends Fragment implements View.OnClickListener {
     Button button;
 
-    public TestFragment() {
+    public CheckUpFragment() {
 
     }
 
@@ -45,7 +40,7 @@ public class TestFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v==button){
-            startActivity(new Intent(this.getContext(), TestingActivity.class));
+            startActivity(new Intent(this.getContext(), CheckUpActivity.class));
         }
     }
 }

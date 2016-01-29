@@ -17,8 +17,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.util.CheckUpAsyncTask;
 import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.TestAsyncTask;
 import com.shyling.healthmanager.util.Utils;
 
 import java.lang.reflect.Method;
@@ -30,15 +30,15 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by shy on 2015/11/8.
  */
 
-public class TestingActivity extends AppCompatActivity implements View.OnClickListener {
+public class CheckUpActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_ENABLE_BLUETOOTH = 130;
     GifImageView gifImageView;
     TextView textBtn, result;
     private AlertDialog exitDialog;
     public BluetoothAdapter bluetoothAdapter;
     private boolean savedBluetoothState = false, founded = false;
-    public boolean isTesting = false;
-    private TestAsyncTask testAsyncTask;
+    public boolean isChecking = false;
+    private CheckUpAsyncTask checkUpAsyncTask;
 
     //2个HENU?不考虑
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -93,9 +93,9 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     };
 
     private void connect(BluetoothDevice device) {
-        isTesting = true;
-        testAsyncTask = new TestAsyncTask(this);
-        testAsyncTask.execute(device);
+        isChecking = true;
+        checkUpAsyncTask = new CheckUpAsyncTask(this);
+        checkUpAsyncTask.execute(device);
     }
 
     @Override
@@ -211,8 +211,8 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(testAsyncTask!=null && testAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-            testAsyncTask.cancel(true);
+        if (checkUpAsyncTask != null && checkUpAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            checkUpAsyncTask.cancel(true);
         }
         if (bluetoothAdapter != null && bluetoothAdapter.isEnabled() && !savedBluetoothState) {
             if (bluetoothAdapter.isDiscovering())
@@ -224,7 +224,7 @@ public class TestingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        if (isTesting) {
+        if (isChecking) {
             exitDialog.show();
         } else {
             finish();

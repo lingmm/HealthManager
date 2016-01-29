@@ -4,8 +4,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
 
-import com.shyling.healthmanager.activity.TestingActivity;
-import com.shyling.healthmanager.model.TestRecord;
+import com.shyling.healthmanager.activity.CheckUpActivity;
+import com.shyling.healthmanager.model.CheckUp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,28 +19,28 @@ import java.util.regex.Pattern;
  * 异步体检
  * Created by shy on 2015/12/20.
  */
-public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord> implements Runnable {
+public class CheckUpAsyncTask extends AsyncTask<BluetoothDevice, String, CheckUp> implements Runnable {
     BluetoothDevice device;
-    TestingActivity context;
+    CheckUpActivity context;
     InputStream is;
     OutputStream os;
     BluetoothSocket socket;
-    TestRecord record;
+    CheckUp record;
     Pattern patternOne,patternTwo;
 
-    public TestAsyncTask(TestingActivity context) {
+    public CheckUpAsyncTask(CheckUpActivity context) {
         this.context = context;
-        record = new TestRecord();
+        record = new CheckUp();
         patternOne = Pattern.compile("W:([\\d\\.]{5}) H:([\\d\\.]{5})");
         patternTwo = Pattern.compile("B(\\d{3})(\\d{3})(\\d{3})");
     }
 
     @Override
-    protected void onPostExecute(TestRecord testRecord) {
-        super.onPostExecute(testRecord);
-        context.isTesting = false;
-        if (testRecord != null) {
-            context.sendToResult(testRecord.toString());
+    protected void onPostExecute(CheckUp checkUp) {
+        super.onPostExecute(checkUp);
+        context.isChecking = false;
+        if (checkUp != null) {
+            context.sendToResult(checkUp.toString());
         } else {
             context.sendToResult("数据读取出错");
         }
@@ -73,7 +73,7 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
     }
 
     @Override
-    protected TestRecord doInBackground(BluetoothDevice... params) {
+    protected CheckUp doInBackground(BluetoothDevice... params) {
         if (params[0] != null) {
             device = params[0];
         }
@@ -139,8 +139,8 @@ public class TestAsyncTask extends AsyncTask<BluetoothDevice, String, TestRecord
                     fetchOne = true;
                 }
                 if(matcherTwo.find()){
-                    record.setHbp(Integer.parseInt(matcherTwo.group(1)));
-                    record.setLbp(Integer.parseInt(matcherTwo.group(2)));
+                    record.setSbp(Integer.parseInt(matcherTwo.group(1)));
+                    record.setDbp(Integer.parseInt(matcherTwo.group(2)));
                     record.setPulse(Integer.parseInt(matcherTwo.group(3)));
                     fetchTwo = true;
                 }

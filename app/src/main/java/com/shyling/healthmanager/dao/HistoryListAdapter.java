@@ -7,42 +7,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.model.TestRecord;
+import com.shyling.healthmanager.model.CheckUp;
 import com.shyling.healthmanager.util.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by shy on 2015/12/13.
  */
 public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.ViewHolder> {
-    private SimpleDateFormat simpleDateFormat;
-    private TestRecord[] testRecords;
+    private CheckUp[] checkUps;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView height, weight, hbp, lbp, pulse, time;
+        public TextView height, weight, hbp, lbp, pulse, date;
 
         ViewHolder(View v) {
             super(v);
-            time = (TextView) v.findViewById(R.id.time);
+            date = (TextView) v.findViewById(R.id.date);
             height = (TextView) v.findViewById(R.id.height);
             weight = (TextView) v.findViewById(R.id.weight);
-            hbp = (TextView) v.findViewById(R.id.hbp);
-            lbp = (TextView) v.findViewById(R.id.lbp);
+            hbp = (TextView) v.findViewById(R.id.sbp);
+            lbp = (TextView) v.findViewById(R.id.dbp);
             pulse = (TextView) v.findViewById(R.id.pulse);
 
         }
     }
 
-    public HistoryListAdapter(TestRecord[] testRecords) {
-        this.testRecords = testRecords;
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public HistoryListAdapter(CheckUp[] checkUps) {
+        this.checkUps = checkUps;
     }
 
     @Override
     public int getItemCount() {
-        return testRecords.length;
+        return checkUps.length;
     }
 
     @Override
@@ -53,16 +48,16 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.time.setText(simpleDateFormat.format(new Date(testRecords[position].getTime())));
-        holder.height.setText(String.valueOf(testRecords[position].getHeight()));
-        holder.weight.setText(String.valueOf(testRecords[position].getWeight()));
-        holder.hbp.setText(String.valueOf(testRecords[position].getHbp()));
-        holder.lbp.setText(String.valueOf(testRecords[position].getLbp()));
-        holder.pulse.setText(String.valueOf(testRecords[position].getPulse()));
+        holder.date.setText(checkUps[position].getCheckUpDate());
+        holder.height.setText(String.valueOf(checkUps[position].getHeight()));
+        holder.weight.setText(String.valueOf(checkUps[position].getWeight()));
+        holder.hbp.setText(String.valueOf(checkUps[position].getSbp()));
+        holder.lbp.setText(String.valueOf(checkUps[position].getDbp()));
+        holder.pulse.setText(String.valueOf(checkUps[position].getPulse()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.Toast("点击: "+position);
+                Utils.Toast("点击: " + position);
             }
         });
     }
