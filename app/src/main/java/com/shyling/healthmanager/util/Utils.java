@@ -42,9 +42,9 @@ public class Utils {
 
     public static void Log(Object o) {
         if (o instanceof String) {
-            Log.d(Const.TAG, (String) o);
+            Log.e(Const.TAG, (String) o);
         } else {
-            Log.d(Const.TAG, o.toString());
+            Log.e(Const.TAG, o.toString());
         }
     }
     //保存账号密码
@@ -53,7 +53,7 @@ public class Utils {
         SharedPreferences.Editor edit = data.edit();
         edit.putString("_userNumber",userName);
         edit.putString("_passWd", passWd);
-        edit.commit();
+        edit.apply();
         return true;
     }
     //读取账号密码
@@ -79,7 +79,6 @@ public class Utils {
             String text = new String(bos.toByteArray());
             return text;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;

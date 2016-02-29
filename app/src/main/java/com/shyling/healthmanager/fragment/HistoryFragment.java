@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.HistoryListAdapter;
-import com.shyling.healthmanager.model.TestRecord;
+import com.shyling.healthmanager.model.CheckUp;
 
+import java.util.Date;
 import java.util.Random;
 
 public class HistoryFragment extends Fragment {
@@ -55,18 +56,18 @@ public class HistoryFragment extends Fragment {
         return v;
     }
 
-    public static TestRecord[] getTest() {
+    public static CheckUp[] getTest() {
         int j = 20;
-        TestRecord[] records = new TestRecord[j];
+        CheckUp[] records = new CheckUp[j];
         Random r = new Random();
         for (int i = 0; i < j; i++) {
-            TestRecord t = new TestRecord();
+            CheckUp t = new CheckUp();
             t.setHeight(r.nextInt(200));
             t.setWeight(r.nextInt(100));
-            t.setHbp(r.nextInt(200));
-            t.setLbp(r.nextInt(100));
+            t.setSbp(r.nextInt(200));
+            t.setDbp(r.nextInt(100));
             t.setPulse(r.nextInt(100));
-            t.setTime(System.currentTimeMillis());
+            t.setCheckUpDate(new Date().toString());
             records[i] = t;
         }
         return records;

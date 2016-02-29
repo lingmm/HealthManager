@@ -1,16 +1,11 @@
 package com.shyling.healthmanager.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.shyling.healthmanager.HealthManagerApplication;
-import com.shyling.healthmanager.model.TestRecord;
+
 import com.shyling.healthmanager.model.User;
 import com.shyling.healthmanager.util.DBHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Mars on 2015/11/9.

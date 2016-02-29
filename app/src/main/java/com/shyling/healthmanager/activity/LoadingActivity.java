@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 
-import com.easemob.chat.EMChat;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.ShortCutSample;
 import com.shyling.healthmanager.util.Utils;
@@ -44,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity {
                     startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                     Utils.Toast("没有网络");
                 }else {
-                    startActivity(new Intent(LoadingActivity.this, LoginActivity.class));
+                    startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
