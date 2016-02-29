@@ -15,6 +15,8 @@ import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.HistoryListAdapter;
 import com.shyling.healthmanager.model.CheckUp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -59,6 +61,7 @@ public class HistoryFragment extends Fragment {
     public static CheckUp[] getTest() {
         int j = 20;
         CheckUp[] records = new CheckUp[j];
+        DateFormat sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL);
         Random r = new Random();
         for (int i = 0; i < j; i++) {
             CheckUp t = new CheckUp();
@@ -67,7 +70,7 @@ public class HistoryFragment extends Fragment {
             t.setSbp(r.nextInt(200));
             t.setDbp(r.nextInt(100));
             t.setPulse(r.nextInt(100));
-            t.setCheckUpDate(new Date().toString());
+            t.setCheckUpDate(sdf.format(new Date()));
             records[i] = t;
         }
         return records;
