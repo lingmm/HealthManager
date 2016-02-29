@@ -43,6 +43,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 case Const.LOGINERROR:
                     Utils.Toast("用户不存在！！！");
                     break;
+                case Const.LOGINERROR_:
+                    Utils.Toast("密码错误！！！");
+                    break;
                 case Const.URLERROR:
                     Utils.Toast("地址错误");
                     break;

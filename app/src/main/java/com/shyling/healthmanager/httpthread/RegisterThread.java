@@ -2,7 +2,10 @@ package com.shyling.healthmanager.httpthread;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.shyling.healthmanager.HealthManagerApplication;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
@@ -40,6 +43,7 @@ public class RegisterThread extends Thread {
             conn.setReadTimeout(5000);
             //拼接出要提交的数据的字符串
             String data = "userNumber=" + URLEncoder.encode(ed_Number) + "&passWd=" + ed_Password;
+            Log.e("hahaha", data);
             //添加post请求的两行属性
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Content-Length", data.length() + "");
@@ -53,10 +57,12 @@ public class RegisterThread extends Thread {
             if(conn.getResponseCode() == 200){
                 InputStream is = conn.getInputStream();
                 String text = Utils.readInputStream(is);
-                if ("SUCCESS".equals(text)) {
-                    msg.what = Const.LOGINSUCCESS;
+                if ("1".equals(text)) {
+                    msg.what = Const.LOGINERROR_;
                 }else if ("ERROR".equals(text)){
                     msg.what = Const.LOGINERROR;
+                }else {
+                    msg.what = Const.LOGINSUCCESS;
                 }
             }
 

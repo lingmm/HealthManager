@@ -37,6 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
                 case Const.LOGINERROR:
                     Utils.Toast("用户已存在");
                     break;
+                case Const.LOGINERROR_:
+                    Utils.Toast("注册失败");
+                    break;
                 case Const.URLERROR:
                     Utils.Toast("地址错误");
                     break;

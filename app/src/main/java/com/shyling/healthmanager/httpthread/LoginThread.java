@@ -54,10 +54,12 @@ public class LoginThread extends Thread {
             if(conn.getResponseCode() == 200){
                 InputStream is = conn.getInputStream();
                 String text = Utils.readInputStream(is);
-                if ("SUCCESS".equals(text)) {
-                    msg.what = Const.LOGINSUCCESS;
-                }else if ("ERROR".equals(text)){
+                if ("0".equals(text)) {
                     msg.what = Const.LOGINERROR;
+                }else if ("1".equals(text)){
+                    msg.what = Const.LOGINERROR_;
+                }else{
+                    msg.what = Const.LOGINSUCCESS;
                 }
             }
 

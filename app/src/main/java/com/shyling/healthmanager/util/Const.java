@@ -10,6 +10,7 @@ public class Const {
     public static final int DBVERSION = 1;
     public static final int LOGINSUCCESS = 6;
     public static final int LOGINERROR = -1;
+    public static final int LOGINERROR_ = -4;
     public static final int URLERROR = -2;
     public static final int NETERROR = -3;
     public static final String DEVICENAME = "HENU";
