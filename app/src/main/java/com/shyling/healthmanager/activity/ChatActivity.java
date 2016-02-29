@@ -54,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_chat);
 
 //        toChatUserName = getIntent().getStringExtra("userId");
+        toChatUserName = "test2";
         listView = (ListView) findViewById(R.id.listView);
         et_message = (EditText) findViewById(R.id.et_massage);
         btn_send = (Button) findViewById(R.id.btn_sendMag);
