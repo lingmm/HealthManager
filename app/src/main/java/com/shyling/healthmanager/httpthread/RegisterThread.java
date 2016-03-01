@@ -59,7 +59,7 @@ public class RegisterThread extends Thread {
                 String text = Utils.readInputStream(is);
                 if ("1".equals(text)) {
                     msg.what = Const.LOGINERROR_;
-                }else if ("ERROR".equals(text)){
+                }else if ("0".equals(text)){
                     msg.what = Const.LOGINERROR;
                 }else {
                     msg.what = Const.LOGINSUCCESS;
