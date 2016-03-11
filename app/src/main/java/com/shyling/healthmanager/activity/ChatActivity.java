@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,13 +28,6 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.shyling.healthmanager.R;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -57,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
         toChatUserName = "test2";
         listView = (ListView) findViewById(R.id.listView);
         et_message = (EditText) findViewById(R.id.et_massage);
+
         btn_send = (Button) findViewById(R.id.btn_sendMag);
 
         conversation = EMChatManager.getInstance().getConversation(toChatUserName);
@@ -185,8 +178,9 @@ public class ChatActivity extends AppCompatActivity {
                     textView = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     textView.setText(message.getFrom());
                 } else {
-                    if (message.getType() == EMMessage.Type.TXT)
+                    if (message.getType() == EMMessage.Type.TXT){
                         convertView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.row_sent_message, null);
+                    }
                 }
                 TextView textViewContent = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                 textViewContent.setText(body.getMessage());

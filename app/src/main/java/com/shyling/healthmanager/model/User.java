@@ -54,12 +54,26 @@ public class User {
         this.birthDay = birthDay;
     }
 
-    public User(String userName, String userNumber, String uName, String birthDay, String cellPhone) {
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", userNumber='" + userNumber + '\'' +
+                ", uName='" + uName + '\'' +
+                ", birthDay='" + birthDay + '\'' +
+                ", cellPhone='" + cellPhone + '\'' +
+                '}';
+    }
+
+    public User(String userName, String uName, String birthDay) {
         this.userName = userName;
-        this.userNumber = userNumber;
         this.uName = uName;
         this.birthDay = birthDay;
-        this.cellPhone = cellPhone;
+    }
+
+    public User( String userNumber,String passWd) {
+        this.userNumber = userNumber;
+        this.passWd = passWd;
     }
 
     public User() {

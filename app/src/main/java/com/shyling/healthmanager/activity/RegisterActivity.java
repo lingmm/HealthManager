@@ -11,8 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.httpthread.RegisterThread;
+import com.shyling.healthmanager.model.User;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
@@ -95,7 +98,10 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);*/
 
                     //网络注册
-                    new RegisterThread(userNumber, passWd, handler).start();
+                    User userInfo = new User(userNumber,passWd);
+                    Gson gson = new Gson();
+                    String userJson = gson.toJson(userInfo,User.class);
+                    new RegisterThread(userJson, handler).start();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 }

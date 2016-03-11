@@ -21,7 +21,9 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.dao.UserDao;
 import com.shyling.healthmanager.model.PersonData;
+import com.shyling.healthmanager.model.User;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
@@ -166,10 +168,11 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
      * @param birthDay  生日
      */
     private void pushDataPerson(String userName, String uName, String birthDay) {
+        User personInfo = new User(userName,uName,birthDay);
+        Gson gson = new Gson();
+        String personJson = gson.toJson(personInfo,User.class);
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userName", userName);
-        params.addBodyParameter("uName", uName);
-        params.addBodyParameter("birthDay", birthDay);
+        params.addBodyParameter("personInfo", personJson);
         HttpUtils http = new HttpUtils();
         http.send(HttpRequest.HttpMethod.POST, Const.path+"web2/LoginServlet", new RequestCallBack<String>() {
 

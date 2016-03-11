@@ -23,11 +23,10 @@ import java.net.URLEncoder;
  */
 
 public class RegisterThread extends Thread {
-    private String ed_Number,ed_Password;
+    private String userJson;
     private Handler handler;
-    public RegisterThread(String ed_Number, String ed_Password, Handler handler){
-        this.ed_Number = ed_Number;
-        this.ed_Password = ed_Password;
+    public RegisterThread(String userJson, Handler handler){
+        this.userJson = userJson;
         this.handler = handler;
     }
     private void doPost(){
@@ -42,7 +41,7 @@ public class RegisterThread extends Thread {
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             //拼接出要提交的数据的字符串
-            String data = "userNumber=" + URLEncoder.encode(ed_Number) + "&passWd=" + ed_Password;
+            String data = "userJson=" + userJson;
             Log.e("hahaha", data);
             //添加post请求的两行属性
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

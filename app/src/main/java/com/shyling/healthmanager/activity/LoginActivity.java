@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
 import com.shyling.healthmanager.httpthread.LoginThread;
@@ -52,7 +56,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 case Const.NETERROR:
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
-                    Utils.Toast("网络异常");
+                    Utils.Toast("服务器异常");
                     finish();
                     break;
                 default:
@@ -148,6 +152,28 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Utils.Toast("请输入密码");
         } else {
             //输入无误
+            EMChatManager.getInstance().login(userNumber,passWd,new EMCallBack() {//回调
+                @Override
+                public void onSuccess() {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            EMGroupManager.getInstance().loadAllGroups();
+                            EMChatManager.getInstance().loadAllConversations();
+                            Log.d("main", "登陆聊天服务器成功！");
+                        }
+                    });
+                }
+
+                @Override
+                public void onProgress(int progress, String status) {
+
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    Log.d("main", "登陆聊天服务器失败！");
+                }
+            });
             new LoginThread(userNumber, passWd, handler).start();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
