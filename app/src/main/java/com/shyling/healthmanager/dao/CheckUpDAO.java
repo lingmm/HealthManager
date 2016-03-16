@@ -97,6 +97,14 @@ public class CheckUpDAO {
         return sqLiteDatabase.update(table_name, values, "id=?", new String[]{String.valueOf(checkUp.getId())}) > 0;
     }
 
+    public void setAllSent() {
+        CheckUp[] checkUps = getAllUnsent();
+        for (CheckUp i : checkUps) {
+            i.setSent(0);
+            this.update(i);
+        }
+    }
+
     public boolean delete(int id) {
         return sqLiteDatabase.delete(table_name, "id=?", new String[]{String.valueOf(id)}) > 0;
     }

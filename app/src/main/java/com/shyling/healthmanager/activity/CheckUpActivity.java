@@ -154,15 +154,6 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
-        Integer integer = (Integer) v.getTag();
-        try {
-            Utils.Toast(Const.jokes[integer]);
-            v.setTag(++integer);
-        } catch (Exception e) {
-            v.setTag(0);
-            this.onClick(v);
-        }
     }
 
     /*

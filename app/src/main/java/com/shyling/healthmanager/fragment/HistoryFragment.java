@@ -12,19 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.dao.HistoryListAdapter;
-import com.shyling.healthmanager.model.CheckUp;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
 
 public class HistoryFragment extends Fragment {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    CheckUpDAO checkUpDAO;
 
     public HistoryFragment() {
+        checkUpDAO = CheckUpDAO.getInstance();
     }
 
     @Override
@@ -45,35 +42,17 @@ public class HistoryFragment extends Fragment {
                 swipeRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.setAdapter(new HistoryListAdapter(getTest()));
+                        recyclerView.getAdapter().notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                }, 2000);
+                }, 1000);
             }
         });
         LinearLayoutManager l = new LinearLayoutManager(getActivity());
         l.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(l);
-        recyclerView.setAdapter(new HistoryListAdapter(getTest()));
+        recyclerView.setAdapter(new HistoryListAdapter(checkUpDAO.getAll()));
         return v;
-    }
-
-    public static CheckUp[] getTest() {
-        int j = 20;
-        CheckUp[] records = new CheckUp[j];
-        DateFormat sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL);
-        Random r = new Random();
-        for (int i = 0; i < j; i++) {
-            CheckUp t = new CheckUp();
-            t.setHeight(r.nextInt(200));
-            t.setWeight(r.nextInt(100));
-            t.setSbp(r.nextInt(200));
-            t.setDbp(r.nextInt(100));
-            t.setPulse(r.nextInt(100));
-            t.setCheckUpDate(sdf.format(new Date()));
-            records[i] = t;
-        }
-        return records;
     }
 
     @Override
