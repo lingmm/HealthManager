@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.httpthread.RegisterThread;
@@ -25,15 +22,17 @@ import com.shyling.healthmanager.util.Utils;
  * Created by Mars on 2015/11/4.
  */
 public class RegisterActivity extends AppCompatActivity {
-    Button btn_post;
-    DBHelper dbHelper;
+    private Button btn_post;
+    //private DBHelper dbHelper;
+    private User userInfo;
     private EditText et_number,et_passWd,et_repassWd;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Const.LOGINSUCCESS:
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    boolean isSaveSuccess = Utils.saveUser(RegisterActivity.this, userInfo.getUserNumber(), userInfo.getPassWd());
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
                     Utils.Toast("注册成功");
                     break;
@@ -73,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         et_number = (EditText) findViewById(R.id.et_number);
         et_passWd = (EditText) findViewById(R.id.et_pwd);
         et_repassWd = (EditText) findViewById(R.id.et_repwd);
-        dbHelper = new DBHelper(this,"tb_userinfo.db",null,1);
+        //dbHelper = new DBHelper(this,"tb_userinfo.db",null,1);
         btn_post = (Button) findViewById(R.id.btn_post);
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(passWd)) {
                     Utils.Toast("请输入密码");
                 } else if (!passWd.equals(repassWd)) {
-                    Toast.makeText(RegisterActivity.this, "两次输入密码不一样!", Toast.LENGTH_LONG).show();
+                    Utils.Toast("两次输入密码不一样!");
                     return;
                 } else {
                     //本地注册
@@ -98,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);*/
 
                     //网络注册
-                    User userInfo = new User(userNumber,passWd);
+                    userInfo = new User(userNumber,passWd);
                     Gson gson = new Gson();
                     String userJson = gson.toJson(userInfo,User.class);
                     new RegisterThread(userJson, handler).start();

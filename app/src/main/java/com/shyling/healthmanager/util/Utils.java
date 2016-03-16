@@ -19,6 +19,7 @@ import java.util.Map;
 public class Utils {
     private static Toast toast;
     static SharedPreferences data;
+    public static String url = "http://192.168.6.35:8080/health/dwz/";
 
     /*
     Toast

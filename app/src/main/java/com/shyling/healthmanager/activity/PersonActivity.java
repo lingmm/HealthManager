@@ -3,6 +3,7 @@ package com.shyling.healthmanager.activity;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     DBHelper dbHelper;
     SQLiteDatabase database;
     Map<String, String> userMap;
+    SharedPreferences mPre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
             actionBar.setHomeButtonEnabled(true);
         }
         setContentView(R.layout.activity_person);
+        mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
+        initView();
+    }
+
+    /**
+     * 初始化
+     */
+    private void initView() {
         username = (EditText) findViewById(R.id.tv_person_username);
         username.setEnabled(false);
         number = (EditText) findViewById(R.id.tv_person_number);
@@ -62,23 +72,12 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         birthday.setEnabled(false);
         cellphone = (EditText) findViewById(R.id.et_person_phone);
         cellphone.setEnabled(false);
-        getDataPerson();//从json中获取数据并设置
+        parserData();//从json中获取数据并设置
         modify_news = (Button) findViewById(R.id.modify_news);
         save_news = (Button) findViewById(R.id.save_news);
         save_news.setOnClickListener(this);
         modify_news.setOnClickListener(this);
         userMap = Utils.getUser(this);
-        /*dbHelper = new DBHelper(this, "tb_userinfo.db", null, 1);
-        database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query("tb_userinfo", null, "userNumber=?", new String[]{ userMap.get("_userNumber")}, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            username.setText(cursor.getString(1));
-            number.setText(cursor.getString(2));
-            name.setText(cursor.getString(4));
-            birthday.setText(cursor.getString(5));
-            cellphone.setText(cursor.getString(6));
-        }
-        else {finish();}*/
     }
 
     @Override
@@ -131,18 +130,12 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         String uName = name.getText().toString().trim();
         String birthDay = birthday.getText().toString().trim();
         pushDataPerson(userName, uName, birthDay);
-        /*ContentValues values = new ContentValues();
-        values.put("userName",userName);
-        values.put("uName",uName);
-        values.put("birthDay", birthDay);
-        database.update("tb_userinfo", values, "userNumber=?", new String[]{userMap.get("_userNumber")});
-        Utils.Toast("保存成功");*/
     }
 
     /**
      * 得到数据
      */
-    private void getDataPerson() {
+   /* private void getDataPerson() {
         HttpUtils utils = new HttpUtils();
         utils.send(HttpRequest.HttpMethod.GET, Const.path +
                 "Person.json", new RequestCallBack<String>() {
@@ -160,21 +153,22 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
-
+*/
     /**
      * 上传数据给服务器
+     *
      * @param userName 昵称
-     * @param uName 姓名
-     * @param birthDay  生日
+     * @param uName    姓名
+     * @param birthDay 生日
      */
     private void pushDataPerson(String userName, String uName, String birthDay) {
-        User personInfo = new User(userName,uName,birthDay);
+        User personInfo = new User(userName, uName, birthDay);
         Gson gson = new Gson();
-        String personJson = gson.toJson(personInfo,User.class);
+        String personJson = gson.toJson(personInfo, User.class);
         RequestParams params = new RequestParams();
         params.addBodyParameter("personInfo", personJson);
         HttpUtils http = new HttpUtils();
-        http.send(HttpRequest.HttpMethod.POST, Const.path+"web2/LoginServlet", new RequestCallBack<String>() {
+        http.send(HttpRequest.HttpMethod.POST, Const.path + "web2/LoginServlet", new RequestCallBack<String>() {
 
             @Override
             public void onFailure(HttpException error, String msg) {
@@ -185,38 +179,29 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onSuccess(ResponseInfo<String> info) {
-                String result = info.result;
-                System.out.println("result" + result);
-                Utils.Toast(result);
+                System.out.println("result" + info.result);
+                Utils.Toast(info.result);
             }
         });
     }
 
     /**
-     * 解析数据
+     * 设置数据
      *
-     * @param result 数据集合
      */
-    protected void parserData(String result) {
+    protected void parserData() {
+        String json = mPre.getString("Json", "");
         Gson gson = new Gson();
-        PersonData data = gson.fromJson(result, PersonData.class);
-        if (data != null) {
-            System.out.println("解析结果....." + data);
-            username.setText(data.userName);
-            number.setText(data.userNumber);
-            name.setText(data.uName);
-            birthday.setText(data.birthDay);
-            cellphone.setText(data.cellPhone);
-        } else {
-            Utils.Toast("解析失败！！！！");
-        }
-
+        username.setText(gson.fromJson(json, User.class).getUserName());
+        number.setText(gson.fromJson(json, User.class).getUserNumber());
+        name.setText(gson.fromJson(json, User.class).getuName());
+        birthday.setText(gson.fromJson(json, User.class).getBirthDay());
+        cellphone.setText(gson.fromJson(json, User.class).getCellPhone());
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //database.close();
     }
 }

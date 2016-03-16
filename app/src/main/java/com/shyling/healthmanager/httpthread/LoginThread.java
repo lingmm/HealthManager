@@ -1,5 +1,6 @@
 package com.shyling.healthmanager.httpthread;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 
@@ -53,10 +54,10 @@ public class LoginThread extends Thread {
             os.write(data.getBytes());
             if(conn.getResponseCode() == 200){
                 InputStream is = conn.getInputStream();
-                String text = Utils.readInputStream(is);
-                if ("0".equals(text)) {
+                String responseInfo = Utils.readInputStream(is);
+                if ("0".equals(responseInfo)) {
                     msg.what = Const.LOGINERROR;
-                }else if ("1".equals(text)){
+                }else if ("1".equals(responseInfo)){
                     msg.what = Const.LOGINERROR_;
                 }else{
                     msg.what = Const.LOGINSUCCESS;
