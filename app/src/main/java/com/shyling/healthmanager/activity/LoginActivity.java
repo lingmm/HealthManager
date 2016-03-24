@@ -44,12 +44,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
+        mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
         Map<String, String> userMap = Utils.getUser(LoginActivity.this);
         if (userMap != null) {
             ed_Number.setText(userMap.get("_userNumber"));
             ed_Password.setText(userMap.get("_passWd"));
         }
-        mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
+
     }
 
     private void initView() {
@@ -125,6 +126,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                                         @Override
                                         public void onFailure(HttpException e, String s) {
+                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            finish();
                                             Utils.Toast("登陆失败");
                                         }
                                     });

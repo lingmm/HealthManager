@@ -5,6 +5,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.exceptions.EaseMobException;
 import com.shyling.healthmanager.HealthManagerApplication;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
@@ -23,10 +25,12 @@ import java.net.URLEncoder;
  */
 
 public class RegisterThread extends Thread {
-    private String userJson;
+    private String userNumber;
+    private String passWd;
     private Handler handler;
-    public RegisterThread(String userJson, Handler handler){
-        this.userJson = userJson;
+    public RegisterThread(String userNumber,String passWd, Handler handler){
+        this.userNumber = userNumber;
+        this.passWd = passWd;
         this.handler = handler;
     }
     private void doPost(){
@@ -34,6 +38,9 @@ public class RegisterThread extends Thread {
         HttpURLConnection conn = null;
         //提交的数据需要经过url编码，英文和数字编码后不变
         try {
+            // 调用sdk注册方法
+            EMChatManager.getInstance()
+                    .createAccountOnServer(userNumber, passWd);
             //URL url = new URL(Const.path+"web2/RegisterServlet");
             URL url = new URL("http://192.168.6.35:8080/health/dwz/mLogin_register");
             conn = (HttpURLConnection) url.openConnection();
@@ -41,7 +48,7 @@ public class RegisterThread extends Thread {
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             //拼接出要提交的数据的字符串
-            String data = "userJson=" + userJson;
+            String data = "userNumber=" + userNumber+"passWd="+passWd;
             Log.e("hahaha", data);
             //添加post请求的两行属性
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -56,13 +63,13 @@ public class RegisterThread extends Thread {
             if(conn.getResponseCode() == 200){
                 InputStream is = conn.getInputStream();
                 String text = Utils.readInputStream(is);
-                if ("1".equals(text)) {
+                /*if ("1".equals(text)) {
                     msg.what = Const.LOGINERROR_;
                 }else if ("0".equals(text)){
                     msg.what = Const.LOGINERROR;
                 }else {
                     msg.what = Const.LOGINSUCCESS;
-                }
+                }*/
             }
 
         } catch (MalformedURLException e) {
@@ -71,7 +78,10 @@ public class RegisterThread extends Thread {
         } catch (IOException e) {
             msg.what = Const.NETERROR;
             e.printStackTrace();
-        }finally {
+        } catch (EaseMobException e) {
+            msg.what = Const.LOGINERROR_;
+            e.printStackTrace();
+        } finally {
             handler.sendMessage(msg);
             if (conn!=null){
                 conn.disconnect();

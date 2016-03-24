@@ -20,6 +20,7 @@ public class Utils {
     private static Toast toast;
     static SharedPreferences data;
     public static String url = "http://192.168.6.35:8080/health/dwz/";
+    public static String[] doctor = new String[]{"17703810458","17703810468","17703810466","17703810477","17703810478","17703810499"};
 
     /*
     Toast
@@ -50,7 +51,7 @@ public class Utils {
     }
     //保存账号密码
     public static boolean saveUser(Context context,String userName,String passWd){
-        data = context.getSharedPreferences("info",Context.MODE_PRIVATE);
+        data = context.getSharedPreferences("Info",Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = data.edit();
         edit.putString("_userNumber",userName);
         edit.putString("_passWd", passWd);
@@ -59,7 +60,7 @@ public class Utils {
     }
     //读取账号密码
     public static Map<String,String> getUser(Context context){
-        data = context.getSharedPreferences("info",Context.MODE_PRIVATE);
+        data = context.getSharedPreferences("Info",Context.MODE_PRIVATE);
         String userName = data.getString("_userNumber",null);
         String passWd = data.getString("_passWd",null);
         Map<String,String> userMap = new HashMap<String,String>();

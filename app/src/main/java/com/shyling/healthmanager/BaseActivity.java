@@ -5,13 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 
 
 /**
  * @author diyangxia
  * 
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
 
 	protected Context context = null;
 	protected HealthManagerApplication mApplication;

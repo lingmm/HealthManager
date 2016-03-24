@@ -1,6 +1,7 @@
 package com.shyling.healthmanager.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,12 @@ import android.widget.EditText;
 import com.easemob.chat.EMChatManager;
 import com.easemob.exceptions.EaseMobException;
 import com.google.gson.Gson;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.httpthread.RegisterThread;
 import com.shyling.healthmanager.model.User;
@@ -27,15 +34,16 @@ import com.shyling.healthmanager.util.Utils;
 public class RegisterActivity extends AppCompatActivity {
     private Button btn_post;
     //private DBHelper dbHelper;
-    private User userInfo;
+    private String userNumber, repassWd;
     private EditText et_number, et_passWd, et_repassWd;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Const.LOGINSUCCESS:
-                    boolean isSaveSuccess = Utils.saveUser(RegisterActivity.this, userInfo.getUserNumber(), userInfo.getPassWd());
+                    Utils.saveUser(RegisterActivity.this, userNumber, repassWd);
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                     Utils.Toast("注册成功");
                     break;
@@ -81,9 +89,9 @@ public class RegisterActivity extends AppCompatActivity {
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userNumber = et_number.getText().toString();
+                userNumber = et_number.getText().toString();
                 String passWd = et_passWd.getText().toString();
-                String repassWd = et_repassWd.getText().toString();
+                repassWd = et_repassWd.getText().toString();
                 if (TextUtils.isEmpty(userNumber)) {
                     Utils.Toast("账号不能为空");
                 } else if (TextUtils.isEmpty(passWd)) {
@@ -101,20 +109,24 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);*/
 
                     //网络注册
-                    // 调用sdk注册方法
-                    try {
-                        EMChatManager.getInstance()
-                                .createAccountOnServer(userNumber,
-                                        passWd);
-                        userInfo = new User(userNumber, passWd);
-                        Gson gson = new Gson();
-                        String userJson = gson.toJson(userInfo, User.class);
-                        new RegisterThread(userJson, handler).start();
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    } catch (EaseMobException e) {
-                        e.printStackTrace();
-                    }
-
+                    /*userInfo = new User(userNumber, passWd);
+                    Gson gson = new Gson();
+                    String userJson = gson.toJson(userInfo, User.class);*/
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 调用sdk注册方法
+                            try {
+                                EMChatManager.getInstance()
+                                        .createAccountOnServer(userNumber, repassWd);
+                                handler.sendEmptyMessage(Const.LOGINSUCCESS);
+                            } catch (EaseMobException e) {
+                                handler.sendEmptyMessage(Const.LOGINERROR_);
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                    //new RegisterThread(userNumber, repassWd, handler).start();
 
                 }
             }

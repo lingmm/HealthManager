@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,6 +31,7 @@ import com.shyling.healthmanager.BaseActivity;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.adapter.ChatListAdapter;
 import com.shyling.healthmanager.model.ChatListData;
+import com.shyling.healthmanager.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public class ChatListActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat_main);
+		ActionBar actionBar = getSupportActionBar();
 
 		mHandler = new Handler() {
 			@Override
@@ -77,10 +80,10 @@ public class ChatListActivity extends BaseActivity {
 		};
 
 //		receiveName = this.getIntent().getStringExtra("userid");
-		receiveName ="123";
+		receiveName = Utils.doctor[0];
 		initView();
-
-		topNameTV.setText(receiveName);
+		actionBar.setTitle("正在和"+receiveName+"聊天");
+		//topNameTV.setText(receiveName);
 		// 只有注册了广播才能接收到新消息，目前离线消息，在线消息都是走接收消息的广播（离线消息目前无法监听，在登录以后，接收消息广播会执行一次拿到所有的离线消息）
 		msgReceiver = new NewMessageBroadcastReceiver();
 		IntentFilter intentFilter = new IntentFilter(EMChatManager
@@ -99,7 +102,7 @@ public class ChatListActivity extends BaseActivity {
 
 	private void initView() {
 		contentET = (EditText) findViewById(R.id.chat_content);
-		topNameTV = (TextView) findViewById(R.id.chat_list_name);
+		//topNameTV = (TextView) findViewById(R.id.chat_list_name);
 		sendBtn = (Button) findViewById(R.id.chat_send_btn);
 		mListView = (ListView) findViewById(R.id.chat_listview);
 	}
