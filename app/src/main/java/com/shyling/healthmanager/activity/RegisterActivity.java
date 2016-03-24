@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.easemob.chat.EMChatManager;
+import com.easemob.exceptions.EaseMobException;
 import com.google.gson.Gson;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.httpthread.RegisterThread;
@@ -25,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btn_post;
     //private DBHelper dbHelper;
     private User userInfo;
-    private EditText et_number,et_passWd,et_repassWd;
+    private EditText et_number, et_passWd, et_repassWd;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -53,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,11 +101,20 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);*/
 
                     //网络注册
-                    userInfo = new User(userNumber,passWd);
-                    Gson gson = new Gson();
-                    String userJson = gson.toJson(userInfo,User.class);
-                    new RegisterThread(userJson, handler).start();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    // 调用sdk注册方法
+                    try {
+                        EMChatManager.getInstance()
+                                .createAccountOnServer(userNumber,
+                                        passWd);
+                        userInfo = new User(userNumber, passWd);
+                        Gson gson = new Gson();
+                        String userJson = gson.toJson(userInfo, User.class);
+                        new RegisterThread(userJson, handler).start();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    } catch (EaseMobException e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
             }
@@ -111,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         /*if(dbHelper != null){
             dbHelper.close();

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,8 +25,6 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
-import com.shyling.healthmanager.httpthread.LoginThread;
-import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
 import java.util.Map;
@@ -38,42 +35,9 @@ import java.util.Map;
 public class LoginActivity extends Activity implements View.OnClickListener {
     private EditText ed_Number, ed_Password;
     private Button btn_register, btn_Login;
-    private UserDao userDao;
     private TextView tv_forget_pwd;
     private String userNumber, passWd;
     private SharedPreferences mPre;
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Const.LOGINSUCCESS:
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    //boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
-                    Utils.Toast("登陆成功");
-                    finish();
-                    break;
-                case Const.LOGINERROR:
-                    Utils.Toast("用户不存在！！！");
-                    break;
-                case Const.LOGINERROR_:
-                    Utils.Toast("密码错误！！！");
-                    break;
-                case Const.URLERROR:
-                    Utils.Toast("地址错误");
-                    break;
-                case Const.NETERROR:
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
-                    Utils.Toast("服务器异常");
-                    finish();
-                    break;
-                default:
-                    break;
-            }
-            boolean isSaveSuccess = Utils.saveUser(LoginActivity.this, userNumber, passWd);
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +49,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             ed_Number.setText(userMap.get("_userNumber"));
             ed_Password.setText(userMap.get("_passWd"));
         }
-        mPre = getSharedPreferences("userInfo",MODE_PRIVATE);
+        mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
     }
 
     private void initView() {
@@ -99,7 +63,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 manager.showSoftInput(ed_Password, 0);
             }
         }, 1000);
-        userDao = new UserDao(LoginActivity.this);
         btn_Login = (Button) findViewById(R.id.btn_login);
         btn_Login.setOnClickListener(LoginActivity.this);
         btn_register = (Button) findViewById(R.id.btn_register);
@@ -124,6 +87,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
     /**
      * 网络登录
      */
@@ -141,18 +105,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 public void onSuccess() {
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            //环信登录
                             EMGroupManager.getInstance().loadAllGroups();
                             EMChatManager.getInstance().loadAllConversations();
                             Log.d("main", "登陆聊天服务器成功！");
+                            //服务器
                             RequestParams params = new RequestParams();
-                            params.addBodyParameter("userNumber",userNumber);
-                            params.addBodyParameter("passWd",passWd);
+                            params.addBodyParameter("userNumber", userNumber);
+                            params.addBodyParameter("passWd", passWd);
                             HttpUtils http = new HttpUtils();
                             http.send(HttpRequest.HttpMethod.POST, Utils.url + "mLogin_login", params,
                                     new RequestCallBack<String>() {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {
-                                            mPre.edit().putString("Json",responseInfo.result).commit();
+                                            mPre.edit().putString("Json", responseInfo.result).commit();
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                             finish();
                                         }
@@ -176,9 +142,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     Log.d("main", "登陆聊天服务器失败！");
                 }
             });
-            //new LoginThread(userNumber, passWd, handler).start();
-
-
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
