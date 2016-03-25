@@ -80,9 +80,11 @@ public class ChatListActivity extends BaseActivity {
 		};
 
 //		receiveName = this.getIntent().getStringExtra("userid");
-		receiveName = Utils.doctor[0];
+		Bundle mBundle = new Bundle();
+		mBundle = getIntent().getBundleExtra("bundleExtra");
+		receiveName = mBundle.getString("ItemPhone");
 		initView();
-		actionBar.setTitle("正在和"+receiveName+"聊天");
+		actionBar.setTitle("正在和"+mBundle.getString("ItemName")+"聊天");
 		//topNameTV.setText(receiveName);
 		// 只有注册了广播才能接收到新消息，目前离线消息，在线消息都是走接收消息的广播（离线消息目前无法监听，在登录以后，接收消息广播会执行一次拿到所有的离线消息）
 		msgReceiver = new NewMessageBroadcastReceiver();
