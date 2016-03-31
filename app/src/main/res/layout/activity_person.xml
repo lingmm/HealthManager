@@ -166,7 +166,7 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="#FFF"
-            android:background="@drawable/shape"/>
+            android:background="@drawable/button"/>
         <Button
             android:id="@+id/modify_news"
             android:layout_width="wrap_content"
@@ -178,6 +178,6 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="#FFF"
-            android:background="@drawable/shape"/>
+            android:background="@drawable/button"/>
     </LinearLayout>
 </LinearLayout>

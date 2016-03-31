@@ -86,18 +86,19 @@
             android:layout_weight="1"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="7.5dp"
-            android:background="@drawable/shape"
+            android:background="@drawable/button"
             android:text="登录"
             android:textSize="15sp"
             android:textColor="#fff" />
         <Button
+            style="@style/AppTheme"
             android:id="@+id/btn_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="7.5dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/shape"
+            android:background="@drawable/button"
             android:text="注册"
             android:textSize="15sp"
             android:textColor="#fff" />

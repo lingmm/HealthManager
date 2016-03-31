@@ -23,6 +23,8 @@ public class Utils {
     public static String url = "http://192.168.6.35:8080/health/dwz/";
     public static String[] doctor = new String[]{"17703810458","17703810468","17703810466","17703810477","17703810478","17703810499","18266037256","15736982989"};
     public static String[] doctorName = new String[]{"赵医生", "钱医生", "孙医生", "李医生", "周医生", "吴医生","郑医生","王医生"};
+    public static int[] dotorImage = new int[]{R.drawable.ic_1,R.drawable.ic_3,R.drawable.ic_4,R.drawable.ic_image,
+            R.drawable.ic_2,R.drawable.ic_5,R.drawable.ic_6, R.drawable.ic_7};
     /*
     Toast
     @param text

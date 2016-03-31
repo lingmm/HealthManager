@@ -83,7 +83,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_register:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
         }
@@ -111,7 +110,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             EMChatManager.getInstance().loadAllConversations();
                             Log.d("main", "登陆聊天服务器成功！");
                             //服务器
-                           /* RequestParams params = new RequestParams();
+                            RequestParams params = new RequestParams();
                             params.addBodyParameter("userNumber", userNumber);
                             params.addBodyParameter("passWd", passWd);
                             HttpUtils http = new HttpUtils();
@@ -126,14 +125,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                                         @Override
                                         public void onFailure(HttpException e, String s) {
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                            finish();
+                                           /* startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            finish();*/
                                             Utils.Toast("登陆失败");
                                         }
-                                    });*/
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    });
+                            /*startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             Utils.saveUser(LoginActivity.this,userNumber,passWd);
-                            finish();
+                            finish();*/
                         }
                     });
                 }

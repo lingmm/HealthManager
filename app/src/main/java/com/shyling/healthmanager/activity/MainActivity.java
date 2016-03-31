@@ -76,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                history.setBackgroundColor(getResources().getColor(color.gray));
-                test.setBackgroundColor(getResources().getColor(color.gray));
-                chat.setBackgroundColor(getResources().getColor(color.gray));
-                v.setBackgroundColor(getResources().getColor(color.white));
+                history.setBackgroundColor(getResources().getColor(color.colorPrimary));
+                test.setBackgroundColor(getResources().getColor(color.colorPrimary));
+                chat.setBackgroundColor(getResources().getColor(color.colorPrimary));
+                v.setBackgroundColor(getResources().getColor(color.colorPrimaryDark));
                 if (v == history) {
                     viewPager.setCurrentItem(0);
                 } else if (v == test) {

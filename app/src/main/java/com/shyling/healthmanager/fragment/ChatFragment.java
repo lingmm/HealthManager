@@ -47,7 +47,7 @@ public class ChatFragment extends Fragment {
         ArrayList<HashMap<String, Object>> listItem = new ArrayList<>();
         for (int i = 0; i < Utils.doctor.length; i++) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("ItemImage", R.mipmap.icon);//加入图片
+            map.put("ItemImage", Utils.dotorImage[i]);//加入图片
             map.put("ItemName", Utils.doctorName[i]);
             map.put("ItemPhone", "联系方式："+Utils.doctor[i]);
             listItem.add(map);

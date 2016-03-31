@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.dao.ShortCutSample;
 import com.shyling.healthmanager.util.Utils;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -22,13 +23,13 @@ public class LoadingActivity extends AppCompatActivity {
 //        EMChat.getInstance().init(this);
 //       创建快捷方式
         setContentView(R.layout.loading_activity);
-//        ShortCutSample sample = new ShortCutSample();
+        ShortCutSample sample = new ShortCutSample();
         String shortCutName = getString(R.string.app_name);
-//        if (sample.hasShortCut(this, shortCutName)) {
-//            sample.deleteShortCut(this, shortCutName);
-//        } else {
-//            sample.creatShortCut(this, shortCutName, R.mipmap.ic_launcher);
-//        }
+        if (sample.hasShortCut(this, shortCutName)) {
+            sample.deleteShortCut(this, shortCutName);
+        } else {
+            sample.creatShortCut(this, shortCutName, R.mipmap.icon);
+        }
 
         final ConnectivityManager mcManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         TelephonyManager mtManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
