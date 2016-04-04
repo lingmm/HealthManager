@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class PersonActivity extends AppCompatActivity implements View.OnClickListener {
     ActionBar actionBar;
-    EditText username, number, name, birthday, cellphone;
+    EditText number, name, birthday, cellphone;
     Button modify_news, save_news;
     DBHelper dbHelper;
     SQLiteDatabase database;
@@ -62,8 +62,6 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
      * 初始化
      */
     private void initView() {
-        username = (EditText) findViewById(R.id.tv_person_username);
-        username.setEnabled(false);
         number = (EditText) findViewById(R.id.tv_person_number);
         number.setEnabled(false);
         name = (EditText) findViewById(R.id.tv_person_name);
@@ -84,8 +82,6 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.modify_news:
-                username.setEnabled(true);
-                username.setTextColor(0xFF686666);
                 name.setEnabled(true);
                 name.setTextColor(0xFF686666);
                 birthday.setEnabled(true);
@@ -115,7 +111,6 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
                 Utils.Toast("修改信息");
                 break;
             case R.id.save_news:
-                username.setEnabled(false);
                 name.setEnabled(false);
                 birthday.setEnabled(false);
                 perfectInfo();
@@ -125,11 +120,9 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void perfectInfo() {
-
-        String userName = username.getText().toString().trim();
         String uName = name.getText().toString().trim();
         String birthDay = birthday.getText().toString().trim();
-        pushDataPerson(userName, uName, birthDay);
+        pushDataPerson(uName, birthDay);
     }
 
     /**
@@ -156,13 +149,11 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
 */
     /**
      * 上传数据给服务器
-     *
-     * @param userName 昵称
      * @param uName    姓名
      * @param birthDay 生日
      */
-    private void pushDataPerson(String userName, String uName, String birthDay) {
-        User personInfo = new User(userName, uName, birthDay);
+    private void pushDataPerson(String uName, String birthDay) {
+        User personInfo = new User(uName, birthDay);
         Gson gson = new Gson();
         String personJson = gson.toJson(personInfo, User.class);
         RequestParams params = new RequestParams();
@@ -190,13 +181,11 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
      *
      */
     protected void parserData() {
-        String json = mPre.getString("Json", "");
+        String json = mPre.getString("Json","");
+        System.out.println(json);
         Gson gson = new Gson();
-        username.setText(gson.fromJson(json, User.class).getUserName());
-        number.setText(gson.fromJson(json, User.class).getUserNumber());
-        name.setText(gson.fromJson(json, User.class).getuName());
-        birthday.setText(gson.fromJson(json, User.class).getBirthDay());
-        cellphone.setText(gson.fromJson(json, User.class).getCellPhone());
+        number.setText(gson.fromJson(json, User.class).getUserName());
+        cellphone.setText(gson.fromJson(json,User.class).getUserName());
     }
 
 

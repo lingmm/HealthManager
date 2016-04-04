@@ -104,4 +104,19 @@ public class CheckUp {
                 ", 身高=" + height +
                 ", 体重=" + weight;
     }
+
+    public CheckUp(int id, String checkUpDate, float height, float weight, int sbp, int dbp, int pulse, int user, long sent) {
+        this.id = id;
+        this.checkUpDate = checkUpDate;
+        this.height = height;
+        this.weight = weight;
+        this.sbp = sbp;
+        this.dbp = dbp;
+        this.pulse = pulse;
+        this.user = user;
+        this.sent = sent;
+    }
+
+    public CheckUp() {
+    }
 }

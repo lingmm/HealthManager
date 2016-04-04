@@ -67,6 +67,7 @@ public class CheckUpDAO {
     //获得所有没有发送到服务器的体检记录
     public CheckUp[] getAllUnsent() {
         return getByOptions(null, "sent>?", "0");
+        //return new CheckUp[]{new CheckUp(1,"123456789",175,70,96,115,70,0,0)};
     }
 
     public boolean add(CheckUp checkUp) {

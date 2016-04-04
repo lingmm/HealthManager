@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,10 +110,10 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);*/
 
                     //网络注册
-                    /*userInfo = new User(userNumber, passWd);
+                   /* userInfo = new User(userNumber, passWd);
                     Gson gson = new Gson();
                     String userJson = gson.toJson(userInfo, User.class);*/
-                    new Thread(new Runnable() {
+                  /*  new Thread(new Runnable() {
                         @Override
                         public void run() {
                             // 调用sdk注册方法
@@ -125,8 +126,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                    }).start();
-                    //new RegisterThread(userNumber, repassWd, handler).start();
+                    }).start();*/
+                    Log.e("进入注册县城","shibai ma");
+                    new RegisterThread(userNumber, repassWd, handler).start();
 
                 }
             }

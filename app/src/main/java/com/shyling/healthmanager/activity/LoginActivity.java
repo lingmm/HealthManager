@@ -25,6 +25,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
+import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
 import java.util.Map;
@@ -114,11 +115,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             params.addBodyParameter("userNumber", userNumber);
                             params.addBodyParameter("passWd", passWd);
                             HttpUtils http = new HttpUtils();
-                            http.send(HttpRequest.HttpMethod.POST, Utils.url + "mLogin_login", params,
+                            http.send(HttpRequest.HttpMethod.POST, Const.path + "mLogin_login", params,
                                     new RequestCallBack<String>() {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {
                                             mPre.edit().putString("Json", responseInfo.result).commit();
+                                            System.out.println("json :" + responseInfo.result);
+                                            Utils.saveUser(LoginActivity.this, userNumber, passWd);
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                             finish();
                                         }

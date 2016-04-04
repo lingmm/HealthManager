@@ -12,7 +12,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:src="@drawable/marker_img"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,32 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:text="昵        称："/>
-        <EditText
-            android:id="@+id/tv_person_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:singleLine="true"
-            android:textSize="20sp"
-            android:hint="昵称"/>
-    </LinearLayout>
-    <TextView
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        style="@style/UnderLine" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            android:text="帐        号："/>
+            android:text="帐    号："/>
         <EditText
             android:id="@+id/tv_person_number"
             android:layout_width="wrap_content"
@@ -76,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:text="姓        名："/>
+            android:text="姓    名："/>
         <EditText
             android:id="@+id/tv_person_name"
             android:layout_width="wrap_content"
@@ -154,13 +128,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="15dp">
         <Button
             android:id="@+id/save_news"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="15dp"
             android:layout_marginRight="7.5dp"
             android:text="保存信息"
             android:textStyle="bold"
@@ -172,7 +145,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="15dp"
             android:layout_marginLeft="7.5dp"
             android:text="修改信息"
             android:textStyle="bold"

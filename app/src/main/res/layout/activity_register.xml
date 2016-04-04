@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:text="帐        号："
+        android:text="帐    号："
         android:textSize="18sp" />
     <EditText
         android:id="@+id/et_number"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:text="密        码："
+            android:text="密    码："
             android:textSize="18sp" />
         <EditText
             android:id="@+id/et_pwd"

@@ -14,6 +14,6 @@ public class Const {
     public static final int URLERROR = -2;
     public static final int NETERROR = -3;
     public static final String DEVICENAME = "HENU";
-    public static final String path = "http://10.0.2.2:8080/";
+    public static final String path = "http://192.168.0.102:8080/health/dwz/";
     public static final String TAG = "healthmanager";
 }

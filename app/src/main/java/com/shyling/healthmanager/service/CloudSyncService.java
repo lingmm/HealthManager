@@ -38,11 +38,13 @@ public class CloudSyncService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         CheckUp[] unsent = CheckUpDAO.getInstance().getAllUnsent();
+
+
         if (unsent != null && unsent.length > 0) {
             Gson gson = new Gson();
             String json = gson.toJson(unsent);
             OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(Const.path).header("username", username).header("password", password).post(RequestBody.create(MediaType.parse("application/json"), json)).build();
+            Request request = new Request.Builder().url(Const.path+"data_add").header("username", username).header("password", password).post(RequestBody.create(MediaType.parse("application/json"), json)).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
