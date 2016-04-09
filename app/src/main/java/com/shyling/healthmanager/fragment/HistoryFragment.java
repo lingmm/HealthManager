@@ -45,7 +45,7 @@ public class HistoryFragment extends Fragment {
                         recyclerView.getAdapter().notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                }, 1000);
+                }, 300);
             }
         });
         LinearLayoutManager l = new LinearLayoutManager(getActivity());

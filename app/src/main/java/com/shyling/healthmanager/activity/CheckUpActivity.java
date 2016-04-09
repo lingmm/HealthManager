@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.dao.CheckUpDAO;
+import com.shyling.healthmanager.model.CheckUp;
 import com.shyling.healthmanager.util.CheckUpAsyncTask;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
@@ -96,6 +98,11 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
         isChecking = true;
         checkUpAsyncTask = new CheckUpAsyncTask(this);
         checkUpAsyncTask.execute(device);
+    }
+
+    public void onCheckUpFinished(CheckUp checkUp){
+        CheckUpDAO checkUpDAO = CheckUpDAO.getInstance();
+        checkUpDAO.add(checkUp);
     }
 
     @Override

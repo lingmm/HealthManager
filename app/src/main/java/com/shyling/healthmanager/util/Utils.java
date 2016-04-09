@@ -2,6 +2,8 @@ package com.shyling.healthmanager.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -45,11 +47,13 @@ public class Utils {
     }
 
 
-    public static void Log(Object o) {
-        if (o instanceof String) {
-            Log.e(Const.TAG, (String) o);
-        } else {
-            Log.e(Const.TAG, o.toString());
+    public static void Log(Object ...obj) {
+        for(Object o : obj){
+            if (o instanceof String) {
+                Log.e(Const.TAG, (String) o);
+            } else {
+                Log.e(Const.TAG, o.toString());
+            }
         }
     }
     //保存账号密码
@@ -87,6 +91,19 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean getNetworkAvailable(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = cm.getAllNetworkInfo();
+        if(networkInfos!=null) {
+            for (NetworkInfo networkInfo : networkInfos) {
+                if(networkInfo.isConnected()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

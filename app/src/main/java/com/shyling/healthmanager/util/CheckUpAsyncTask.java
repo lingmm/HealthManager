@@ -40,6 +40,7 @@ public class CheckUpAsyncTask extends AsyncTask<BluetoothDevice, String, CheckUp
         super.onPostExecute(checkUp);
         context.isChecking = false;
         if (checkUp != null) {
+            context.onCheckUpFinished(checkUp);
             context.sendToResult(checkUp.toString());
         } else {
             context.sendToResult("数据读取出错");
