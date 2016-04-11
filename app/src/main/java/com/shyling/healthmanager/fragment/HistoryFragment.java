@@ -1,6 +1,7 @@
 package com.shyling.healthmanager.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.adapter.HistoryListAdapter;
 import com.shyling.healthmanager.dao.CheckUpDAO;
-import com.shyling.healthmanager.dao.HistoryListAdapter;
+import com.shyling.healthmanager.service.CloudSyncService;
 
 public class HistoryFragment extends Fragment {
     RecyclerView recyclerView;
@@ -42,6 +44,7 @@ public class HistoryFragment extends Fragment {
                 swipeRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        getContext().startService(new Intent(getContext(), CloudSyncService.class));
                         recyclerView.getAdapter().notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }

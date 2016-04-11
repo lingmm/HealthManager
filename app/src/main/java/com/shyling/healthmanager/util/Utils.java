@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,13 +33,13 @@ public class Utils {
     @param text
     单例Toast,新的Toast会替换旧的
      */
-    public static void Toast(String text) {
+    public static void Toast(String... text) {
         if (toast == null) {
             synchronized (Toast.class) {
                 toast = Toast.makeText(HealthManagerApplication.healthManagerApplication, null, Toast.LENGTH_LONG);
             }
         }
-        toast.setText(text);
+        toast.setText(TextUtils.join("\n", text));
         toast.show();
     }
 

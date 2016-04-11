@@ -1,4 +1,4 @@
-package com.shyling.healthmanager.dao;
+package com.shyling.healthmanager.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.model.CheckUp;
-import com.shyling.healthmanager.util.Utils;
 
 /**
  * Created by shy on 2015/12/13.
@@ -54,11 +53,5 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         holder.hbp.setText(String.valueOf(checkUps[position].getSbp()));
         holder.lbp.setText(String.valueOf(checkUps[position].getDbp()));
         holder.pulse.setText(String.valueOf(checkUps[position].getPulse()));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.Toast("点击: " + position);
-            }
-        });
     }
 }

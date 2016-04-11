@@ -24,11 +24,29 @@ public class Option<T> {
         }
     }
 
+    /*
+    M a -> boolean
+     */
     public boolean isPresent() {
         return save != null;
     }
 
+    /*
+    a -> M a
+     */
     public static <U> Option<U> of(U from) {
         return new Option<>(from);
     }
+
+    /*
+    M (M a) -> M a
+    */
+    public static <U> Option<U> of(Option<U> from) {
+        if (from == null) {
+            return new Option<>(null);
+        } else {
+            return Option.of(from.get());
+        }
+    }
+
 }
