@@ -4,8 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.alibaba.fastjson.JSON;
 import com.shyling.healthmanager.HealthManagerApplication;
 import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.model.CheckUp;
@@ -40,8 +39,7 @@ public class CloudSyncService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         CheckUp[] unsent = Option.of(CheckUpDAO.getInstance().getAllUnsent()).getOrElse(new CheckUp[]{});
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        String json = gson.toJson(unsent);
+        String json = JSON.toJSONString(unsent);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(Const.path + "data_add").header("username", username).header("password", password).post(RequestBody.create(MediaType.parse("application/json"), json)).build();
         client.newCall(request).enqueue(new Callback() {
