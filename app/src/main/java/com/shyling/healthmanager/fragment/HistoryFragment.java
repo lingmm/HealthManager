@@ -45,7 +45,7 @@ public class HistoryFragment extends Fragment {
                     @Override
                     public void run() {
                         getContext().startService(new Intent(getContext(), CloudSyncService.class));
-                        recyclerView.getAdapter().notifyDataSetChanged();
+                        recyclerView.setAdapter(new HistoryListAdapter(checkUpDAO.getAll()));
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, 300);

@@ -54,7 +54,7 @@ public class CheckUpDAO {
             tmp.setSbp(c.getInt(c.getColumnIndex("sbp")));
             tmp.setDbp(c.getInt(c.getColumnIndex("dbp")));
             tmp.setPulse(c.getInt(c.getColumnIndex("pulse")));
-            tmp.setUser(c.getInt(c.getColumnIndex("user")));
+            tmp.setUser(c.getString(c.getColumnIndex("user")));
             tmp.setSent(c.getLong(c.getColumnIndex("sent")));
             checkUps.add(tmp);
         }

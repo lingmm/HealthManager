@@ -32,7 +32,7 @@ public class CheckupValue extends AndroidTestCase {
         c1.setHeight(179);
         c1.setWeight(60);
         c1.setPulse(60);
-        c1.setUser(0);
+        c1.setUser("username");
 
         CheckUp c2 = new CheckUp();
         c2.setCheckUpDate("今天");
@@ -42,7 +42,7 @@ public class CheckupValue extends AndroidTestCase {
         c2.setHeight(179);
         c2.setWeight(60);
         c2.setPulse(60);
-        c2.setUser(0);
+        c2.setUser("username");
 
         assertTrue(checkUpDAO.add(c1));
         assertTrue(checkUpDAO.add(c2));

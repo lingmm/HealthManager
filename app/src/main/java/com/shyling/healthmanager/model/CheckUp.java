@@ -16,7 +16,7 @@ public class CheckUp {
     private int dbp;//血压-低
     private int pulse;//心率
     @JSONField(serialize = false, deserialize = false)
-    private int user;
+    private String user;
     @JSONField(serialize = false, deserialize = false)
     private long sent;//是否已经发送到服务器,0=>未发送,时间戳=>发送的时间
 
@@ -68,11 +68,11 @@ public class CheckUp {
         this.checkUpDate = checkUpDate;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -101,7 +101,7 @@ public class CheckUp {
                 ", 体重=" + weight;
     }
 
-    public CheckUp(int id, String checkUpDate, float height, float weight, int sbp, int dbp, int pulse, int user, long sent) {
+    public CheckUp(int id, String checkUpDate, float height, float weight, int sbp, int dbp, int pulse, String user, long sent) {
         this.id = id;
         this.checkUpDate = checkUpDate;
         this.height = height;
