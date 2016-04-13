@@ -22,7 +22,7 @@ import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.model.CheckUp;
 import com.shyling.healthmanager.util.CheckUpAsyncTask;
 import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.Option;
+import com.shyling.healthmanager.util.Optional;
 import com.shyling.healthmanager.util.Utils;
 
 import java.lang.reflect.Method;
@@ -68,6 +68,8 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
                     if (state == BluetoothDevice.BOND_NONE) {
                         Utils.Toast("配对密码为:0000");
                         if (Build.VERSION.SDK_INT >= 19) {
+                            device.setPairingConfirmation(true);
+                            device.setPin("0000".getBytes());
                             device.createBond();
                         } else {
                             //API Level < 19使用反射调用
@@ -76,7 +78,7 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
                                 createBond.setAccessible(true);
                                 createBond.invoke(device);
                             } catch (Exception e) {
-                                //没方法就算了
+                                Utils.Toast("请手动连接设备");
                             }
                         }
                     } else if (state == BluetoothDevice.BOND_BONDED) {
@@ -109,7 +111,7 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
         CheckUpDAO checkUpDAO = CheckUpDAO.getInstance();
         checkUp.setCheckUpDate(new SimpleDateFormat("yyyy-mm-dd").format(new Date()));
         Map<String, String> hashMap = Utils.getUser(HealthManagerApplication.healthManagerApplication);
-        String username = Option.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
+        String username = Optional.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
         checkUp.setUser(username);
         System.out.println();
         checkUp.setSent(System.currentTimeMillis());

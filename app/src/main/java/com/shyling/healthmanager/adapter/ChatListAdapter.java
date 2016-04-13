@@ -27,26 +27,21 @@ public class ChatListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return mListData.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public View getView(int index, View cView, ViewGroup arg2) {
-		// TODO Auto-generated method stub
-
 		Holder holder;
 		if (cView == null) {
 			holder = new Holder();

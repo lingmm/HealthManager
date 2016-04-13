@@ -24,7 +24,8 @@ import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
 
-import net.sf.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -42,8 +43,6 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     Map<String, String> userMap;
     SharedPreferences mPre;
     private UserInfo userInfo;
-    private String json;
-    private JSONObject jsonObject;
     private String mName;
     private String mPhone;
     private String mBirthday;
@@ -59,12 +58,16 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_person);
         mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
 
-        json = mPre.getString("Json","");
+        String json = mPre.getString("Json", "");
         System.out.println("LSF" + json);
-        jsonObject = JSONObject.fromString(json);
-        mPhone = jsonObject.getString("cellphone");
-        mBirthday = jsonObject.getString("birthDay");
-        mName = jsonObject.getString("uname");
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            mPhone = jsonObject.getString("cellphone");
+            mBirthday = jsonObject.getString("birthDay");
+            mName = jsonObject.getString("uname");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         /*String[] split = json.split(",");

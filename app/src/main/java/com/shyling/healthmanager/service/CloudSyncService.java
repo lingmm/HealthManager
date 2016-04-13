@@ -11,7 +11,7 @@ import com.shyling.healthmanager.HealthManagerApplication;
 import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.model.CheckUp;
 import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.Option;
+import com.shyling.healthmanager.util.Optional;
 import com.shyling.healthmanager.util.Utils;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
@@ -41,8 +41,8 @@ public class CloudSyncService extends Service {
 
     public CloudSyncService() {
         Map<String, String> hashMap = Utils.getUser(HealthManagerApplication.healthManagerApplication);
-        username = Option.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
-        password = Option.of(hashMap.get("_passWd")).getOrElse("undefined_password");
+        username = Optional.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
+        password = Optional.of(hashMap.get("_passWd")).getOrElse("undefined_password");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CloudSyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        CheckUp[] unsent = Option.of(CheckUpDAO.getInstance().getAllUnsent()).getOrElse(new CheckUp[]{});
+        CheckUp[] unsent = Optional.of(CheckUpDAO.getInstance().getAllUnsent()).getOrElse(new CheckUp[]{});
         String json = JSON.toJSONString(unsent);
         Utils.Log(json);
         OkHttpClient client = new OkHttpClient();

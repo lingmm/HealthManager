@@ -43,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity {
                     startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                     Utils.Toast("没有网络");
                 }else {
-                    startActivity(new Intent(LoadingActivity.this, LoginActivity.class));
+                    startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }

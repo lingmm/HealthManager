@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBlue">#FF3036E7</color>
     <color name="loadingactivitybackground">#daf2f2</color>
-    <color name="white">#12ca83</color>
+    <color name="white">#fff</color>
     <color name="gray">#ccc</color>
     <color name="testing_background">#66CEFF</color>
     <color name="light_gray">#eee</color>

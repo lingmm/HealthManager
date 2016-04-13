@@ -26,7 +26,7 @@ public class CheckupValue extends AndroidTestCase {
 
         CheckUp c1 = new CheckUp();
         c1.setCheckUpDate("昨天");
-        c1.setSent(0);
+        c1.setSent(System.currentTimeMillis());
         c1.setDbp(60);
         c1.setSbp(130);
         c1.setHeight(179);
@@ -50,9 +50,9 @@ public class CheckupValue extends AndroidTestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
-        checkUpDAO.drop();
-        assertTrue(checkUpDAO.getAll() == null || checkUpDAO.getAll().length == 0);
+//        super.tearDown();
+//        checkUpDAO.drop();
+//        assertTrue(checkUpDAO.getAll() == null || checkUpDAO.getAll().length == 0);
     }
 
     public void testFetch() {

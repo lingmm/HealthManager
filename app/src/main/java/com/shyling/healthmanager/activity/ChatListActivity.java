@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
@@ -27,17 +29,15 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.MessageBody;
 import com.easemob.chat.TextMessageBody;
-import com.shyling.healthmanager.BaseActivity;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.adapter.ChatListAdapter;
 import com.shyling.healthmanager.model.ChatListData;
-import com.shyling.healthmanager.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChatListActivity extends BaseActivity {
+public class ChatListActivity extends AppCompatActivity {
 
 	private EditText contentET;
 	private TextView topNameTV;
@@ -50,10 +50,10 @@ public class ChatListActivity extends BaseActivity {
 	private InputMethodManager imm;
 
 	private String receiveName = null;
+	private static Handler mHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat_main);
 		ActionBar actionBar = getSupportActionBar();
@@ -61,7 +61,6 @@ public class ChatListActivity extends BaseActivity {
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
 				super.handleMessage(msg);
 				switch (msg.what) {
 				case 0x00001:
@@ -110,12 +109,10 @@ public class ChatListActivity extends BaseActivity {
 	}
 
 	private void initEvent() {
-		// TODO Auto-generated method stub
 		sendBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				sendMsg();
 			}
 		});
@@ -124,7 +121,6 @@ public class ChatListActivity extends BaseActivity {
 
 			@Override
 			public boolean onKey(View arg0, int keycode, KeyEvent arg2) {
-				// TODO Auto-generated method stub
 				if (keycode == KeyEvent.KEYCODE_ENTER
 						&& arg2.getAction() == KeyEvent.ACTION_DOWN) {
 					sendMsg();
@@ -155,19 +151,16 @@ public class ChatListActivity extends BaseActivity {
 
 			@Override
 			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
 				Log.i("TAG", "消息发送失败");
 			}
 
 			@Override
 			public void onProgress(int arg0, String arg1) {
-				// TODO Auto-generated method stub
 				Log.i("TAG", "正在发送消息");
 			}
 
 			@Override
 			public void onSuccess() {
-				// TODO Auto-generated method stub
 				Log.i("TAG", "消息发送成功");
 				ChatListData data = new ChatListData();
 				data.setSendContent(content);
@@ -216,7 +209,6 @@ public class ChatListActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		unregisterReceiver(msgReceiver);
 

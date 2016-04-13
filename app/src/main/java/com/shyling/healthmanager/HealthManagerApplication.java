@@ -48,8 +48,6 @@ public class HealthManagerApplication extends Application {
     }
 
     protected void initHXOptions() {
-        Log.d("health", "init HuanXin Options");
-
         // 获取到EMChatOptions对象
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         // 默认添加好友时，是不需要验证的true，改成需要验证false
