@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -20,9 +19,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.dao.UserDao;
-import com.shyling.healthmanager.model.PersonData;
-import com.shyling.healthmanager.model.User;
 import com.shyling.healthmanager.model.UserInfo;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
