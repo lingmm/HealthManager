@@ -2,6 +2,9 @@ package com.shyling.healthmanager.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,13 +33,13 @@ public class Utils {
     @param text
     单例Toast,新的Toast会替换旧的
      */
-    public static void Toast(String text) {
+    public static void Toast(String... text) {
         if (toast == null) {
             synchronized (Toast.class) {
                 toast = Toast.makeText(HealthManagerApplication.healthManagerApplication, null, Toast.LENGTH_LONG);
             }
         }
-        toast.setText(text);
+        toast.setText(TextUtils.join("\n", text));
         toast.show();
     }
 
@@ -45,11 +48,13 @@ public class Utils {
     }
 
 
-    public static void Log(Object o) {
-        if (o instanceof String) {
-            Log.e(Const.TAG, (String) o);
-        } else {
-            Log.e(Const.TAG, o.toString());
+    public static void Log(Object ...obj) {
+        for(Object o : obj){
+            if (o instanceof String) {
+                Log.e(Const.TAG, (String) o);
+            } else {
+                Log.e(Const.TAG, o.toString());
+            }
         }
     }
     //保存账号密码
@@ -87,6 +92,19 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean getNetworkAvailable(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = cm.getAllNetworkInfo();
+        if(networkInfos!=null) {
+            for (NetworkInfo networkInfo : networkInfos) {
+                if(networkInfo.isConnected()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

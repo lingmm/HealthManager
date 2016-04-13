@@ -1,27 +1,23 @@
 package com.shyling.healthmanager.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * Created by shy on 2015/11/8.
  */
 public class CheckUp {
+    @JSONField(serialize = false, deserialize = false)
     private int id;
-    @Expose
-    @SerializedName("date")
+    @JSONField(name = "date")
     private String checkUpDate;//日期
-    @Expose
     private float height;//身高
-    @Expose
     private float weight;//体重
-    @Expose
     private int sbp;//血压-高
-    @Expose
     private int dbp;//血压-低
-    @Expose
     private int pulse;//心率
-    private int user;
+    @JSONField(serialize = false, deserialize = false)
+    private String user;
+    @JSONField(serialize = false, deserialize = false)
     private long sent;//是否已经发送到服务器,0=>未发送,时间戳=>发送的时间
 
     public float getSbp() {
@@ -72,11 +68,11 @@ public class CheckUp {
         this.checkUpDate = checkUpDate;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -105,7 +101,7 @@ public class CheckUp {
                 ", 体重=" + weight;
     }
 
-    public CheckUp(int id, String checkUpDate, float height, float weight, int sbp, int dbp, int pulse, int user, long sent) {
+    public CheckUp(int id, String checkUpDate, float height, float weight, int sbp, int dbp, int pulse, String user, long sent) {
         this.id = id;
         this.checkUpDate = checkUpDate;
         this.height = height;
