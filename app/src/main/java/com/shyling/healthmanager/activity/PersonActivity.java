@@ -2,9 +2,7 @@ package com.shyling.healthmanager.activity;
 
 
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -25,9 +23,12 @@ import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.UserDao;
 import com.shyling.healthmanager.model.PersonData;
 import com.shyling.healthmanager.model.User;
+import com.shyling.healthmanager.model.UserInfo;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.DBHelper;
 import com.shyling.healthmanager.util.Utils;
+
+import net.sf.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -44,6 +45,12 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     SQLiteDatabase database;
     Map<String, String> userMap;
     SharedPreferences mPre;
+    private UserInfo userInfo;
+    private String json;
+    private JSONObject jsonObject;
+    private String mName;
+    private String mPhone;
+    private String mBirthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,48 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         }
         setContentView(R.layout.activity_person);
         mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
+
+        json = mPre.getString("Json","");
+        System.out.println("LSF" + json);
+        jsonObject = JSONObject.fromString(json);
+        mPhone = jsonObject.getString("cellphone");
+        mBirthday = jsonObject.getString("birthDay");
+        mName = jsonObject.getString("uname");
+
+
+        /*String[] split = json.split(",");
+        for(int i = 0; i < split.length; i++){
+            if(split[i].contains("birthDay")){
+                String[] split1 = split[i].split(":");
+                System.out.println(split1[1]);
+                System.out.println(split1[1].length());
+                if(split1[1].length()<=2){
+                    mBirthday="";
+                }else{
+                    mBirthday = split1[1].substring(1,split1[1].length()-1);
+                }
+            }
+            if(split[i].contains("uname")){
+                String[] split1 = split[i].split(":");
+                System.out.println(split1[1]);
+                if(split1[1].length()<=2){
+                    mName="";
+                }else{
+                    mName = split1[1].substring(1,split1[1].length()-1);
+                }
+            }
+            if(split[i].contains("cellphone")){
+                String[] split1 = split[i].split(":");
+                System.out.println(split1[1]);
+                System.out.println(split1[1].length());
+                if(split1[1].length()<=2){
+                    mPhone="";
+                }else{
+                    mPhone = split1[1].substring(1,split1[1].length()-1);
+                    System.out.println(mPhone);
+                }
+            }
+        }*/
         initView();
     }
 
@@ -120,9 +169,11 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void perfectInfo() {
+        String userNumber = number.getText().toString().trim();
         String uName = name.getText().toString().trim();
         String birthDay = birthday.getText().toString().trim();
-        pushDataPerson(uName, birthDay);
+        System.out.println(userNumber+" " + uName+" " + birthDay);
+        pushDataPerson(userNumber,uName, birthDay);
     }
 
     /**
@@ -152,14 +203,15 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
      * @param uName    姓名
      * @param birthDay 生日
      */
-    private void pushDataPerson(String uName, String birthDay) {
-        User personInfo = new User(uName, birthDay);
-        Gson gson = new Gson();
-        String personJson = gson.toJson(personInfo, User.class);
+    private void pushDataPerson(String userNumber,String uName, String birthDay) {
+        final String mUName = uName;
+        final String mNBirthDay = birthDay;
         RequestParams params = new RequestParams();
-        params.addBodyParameter("personInfo", personJson);
+        params.addBodyParameter("userNumber",userNumber);
+        params.addBodyParameter("uName", uName);
+        params.addBodyParameter("birthDay",birthDay);
         HttpUtils http = new HttpUtils();
-        http.send(HttpRequest.HttpMethod.POST, Const.path + "web2/LoginServlet", new RequestCallBack<String>() {
+        http.send(HttpRequest.HttpMethod.POST, Const.path + "mLogin_edit",params, new RequestCallBack<String>() {
 
             @Override
             public void onFailure(HttpException error, String msg) {
@@ -171,7 +223,9 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onSuccess(ResponseInfo<String> info) {
                 System.out.println("result" + info.result);
-                Utils.Toast(info.result);
+                birthday.setText(mNBirthDay);
+                name.setText(mUName);
+                Utils.Toast("111");
             }
         });
     }
@@ -181,11 +235,16 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
      *
      */
     protected void parserData() {
-        String json = mPre.getString("Json","");
-        System.out.println(json);
-        Gson gson = new Gson();
-        number.setText(gson.fromJson(json, User.class).getUserName());
-        cellphone.setText(gson.fromJson(json,User.class).getUserName());
+
+
+        number.setText(mPhone);
+        cellphone.setText(mPhone);
+        birthday.setText(mBirthday);
+        name.setText(mName);
+
+//        Gson gson = new Gson();
+//        number.setText(gson.fromJson(json, User.class).getUserName());
+//        cellphone.setText(gson.fromJson(json,User.class).getUserName());
     }
 
 
