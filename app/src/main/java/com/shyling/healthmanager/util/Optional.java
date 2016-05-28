@@ -78,4 +78,10 @@ public class Optional<T> {
         }
     }
 
+    @Override
+    public boolean equals(Optional other){
+        //todo
+        return false;
+    }
+
 }
