@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.shyling.healthmanager.R;
+import com.shyling.healthmanager.util.Utils;
 import com.shyling.healthmanager.view.SettingItemView;
 
 /**
@@ -53,8 +54,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.tv_logon:
                 //注销
                 //startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                Utils.setBoolean(this,"is_user_logout",true);
+                startActivity(new Intent(this, LoginActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                MainActivity.instance.finish();
+                finish();
                 break;
             case R.id.siv_update:
                 if (sivUpdate.isChecked()){

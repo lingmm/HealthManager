@@ -29,6 +29,7 @@ import static com.shyling.healthmanager.R.string;
  * Created by shy on 2015/11/8.
  */
 public class MainActivity extends AppCompatActivity {
+    public static MainActivity instance = null;
     android.support.v4.app.FragmentManager fragmentManager;
     ImageButton history, test, chat;
     ViewPager viewPager;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == id.about) {
             getAboutDialog().show();
         } else if (itemId == id.exit) {
-            System.exit(0);//退出app
+            MainActivity.this.finish();
         } else if (itemId == id.setting) {
             startActivity(new Intent(this, SettingActivity.class));
         }

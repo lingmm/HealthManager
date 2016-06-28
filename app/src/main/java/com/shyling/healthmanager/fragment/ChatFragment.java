@@ -7,24 +7,43 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.activity.ChatListActivity;
+import com.shyling.healthmanager.adapter.ChatListAdapter;
+import com.shyling.healthmanager.model.DocInfo;
+import com.shyling.healthmanager.model.UserInfo;
+import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class ChatFragment extends Fragment {
-    SwipeRefreshLayout swipeRefreshLayout;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private List<DocInfo> mDoctor;
+    private MyAdapter myAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
@@ -38,40 +57,91 @@ public class ChatFragment extends Fragment {
                 swipeRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        getDoctorList();
+                        myAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, 1000);
             }
         });
         //将医生item中的数据放入
-        ArrayList<HashMap<String, Object>> listItem = new ArrayList<>();
-        for (int i = 0; i < Utils.doctor.length; i++) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("ItemImage", Utils.dotorImage[i]);//加入图片
-            map.put("ItemName", Utils.doctorName[i]);
-            map.put("ItemPhone", "联系方式："+Utils.doctor[i]);
-            listItem.add(map);
-        }
+        mDoctor = new ArrayList<>();
+        getDoctorList();
+        myAdapter = new MyAdapter();
         //将医生列表显示在ListView中
-        SimpleAdapter mSimp = new SimpleAdapter(this.getActivity(), listItem, R.layout.chat_list_item,
-                new String[]{"ItemImage"
-                        , "ItemName", "ItemPhone"},
-                new int[]{R.id.iv_image, R.id.name, R.id.number});
-        /*ArrayAdapter<String> phone = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, doctor);//显示列表*/
-        list.setAdapter(mSimp);
-        //设置Item监听的监听事件
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setAdapter(myAdapter);
+        return view;
+    }
+
+    private void getDoctorList() {
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.GET, Const.path+"mLogin_m_getDocList", new RequestCallBack<String>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle mBundle = new Bundle();
-                mBundle.putString("ItemName", Utils.doctorName[position]);
-                mBundle.putString("ItemPhone", Utils.doctor[position]);
-                startActivity(new Intent(getContext(),
-                        ChatListActivity.class).putExtra("bundleExtra", mBundle));
-                //Utils.Toast("你点击了第" + (position + 1) + "行");
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                byte[] b = responseInfo.result.getBytes();
+                Log.e("获取成功 : 数据result--", responseInfo.result);
+                try {
+                    String json = new String(b, "UTF-8");
+                    Log.e("获取成功 : 数据--", json);
+                    Gson gson = new Gson();
+                    mDoctor = gson.fromJson(json, new TypeToken<List<DocInfo>>() {
+                    }.getType());
+                    if (mDoctor != null) {
+                    } else {
+                        getDoctorList();
+                        Log.e("TEST 空了:", mDoctor + "为空，刷新吧");
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
             }
         });
-        return view;
+    }
+
+    class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mDoctor.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mDoctor.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View view = View.inflate(getContext(), R.layout.chat_list_item, null);
+            ImageView imageView = (ImageView) view.findViewById(R.id.iv_image);
+            TextView docName = (TextView) view.findViewById(R.id.name);
+            TextView docNumber = (TextView) view.findViewById(R.id.number);
+            BitmapUtils bitmapUtils = new BitmapUtils(getContext());
+            // 加载网络图片
+            bitmapUtils.display(imageView, "http://bbs.lidroid.com/static/image/common/logo.png");
+            docName.setText(mDoctor.get(position).getDocName());
+            docNumber.setText(mDoctor.get(position).getContact());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("ItemName", mDoctor.get(position).getDocName());
+                    mBundle.putString("ItemPhone", mDoctor.get(position).getContact());
+                    startActivity(new Intent(getContext(),
+                            ChatListActivity.class).putExtra("bundleExtra", mBundle));
+                }
+            });
+            return view;
+        }
     }
 }
