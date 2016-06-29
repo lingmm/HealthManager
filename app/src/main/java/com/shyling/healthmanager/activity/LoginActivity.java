@@ -123,6 +123,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {
                                             mPre.edit().putString("Json", responseInfo.result).commit();
+                                            Utils.setBoolean(LoginActivity.this,"is_user_logout",true);
                                             System.out.println("json :" + responseInfo.result);
                                             Utils.saveUser(LoginActivity.this, userNumber, passWd);
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -157,7 +158,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     //Utils.Toast("登陆失败");
                 }
             });
-            finish();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }

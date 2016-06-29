@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<DocInfo> mDoctor;
     private MyAdapter myAdapter;
@@ -51,19 +51,8 @@ public class ChatFragment extends Fragment {
         //刷新效果
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.wi_swipeRefesh);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getDoctorList();
-                        myAdapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 1000);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this);
+        onRefresh();
         //将医生item中的数据放入
         mDoctor = new ArrayList<>();
         getDoctorList();
@@ -101,6 +90,18 @@ public class ChatFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getDoctorList();
+                myAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 
     class MyAdapter extends BaseAdapter {

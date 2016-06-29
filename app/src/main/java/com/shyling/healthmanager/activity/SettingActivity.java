@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.tv_logon:
                 //注销
                 //startActivity(new Intent(this, LoginActivity.class));
-                Utils.setBoolean(this,"is_user_logout",true);
+                Utils.setBoolean(SettingActivity.this,"is_user_logout",false);
                 startActivity(new Intent(this, LoginActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 MainActivity.instance.finish();

@@ -17,7 +17,7 @@ import com.shyling.healthmanager.adapter.HistoryListAdapter;
 import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.service.CloudSyncService;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment{
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     CheckUpDAO checkUpDAO;
