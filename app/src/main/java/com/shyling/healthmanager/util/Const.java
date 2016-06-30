@@ -15,5 +15,6 @@ public class Const {
     public static final int NETERROR = -3;
     public static final String DEVICENAME = "HENU";
     public static final String path = "http://123.206.79.230/health/dwz/";
+//    public static final String path = "http://192.168.1.100:8080/health/dwz/";
     public static final String TAG = "healthmanager";
 }

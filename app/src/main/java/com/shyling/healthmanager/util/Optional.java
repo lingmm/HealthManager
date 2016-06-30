@@ -79,7 +79,7 @@ public class Optional<T> {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(Object other){
         //todo
         return false;
     }

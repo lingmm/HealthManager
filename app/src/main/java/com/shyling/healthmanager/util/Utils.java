@@ -46,7 +46,29 @@ public class Utils {
     public static void Toast(int textid) {
         Utils.Toast(HealthManagerApplication.healthManagerApplication.getString(textid));
     }
-
+    /**
+     * 判断网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            //如果仅仅是用来判断网络连接
+            //则可以使用 cm.getActiveNetworkInfo().isAvailable();
+            NetworkInfo[] info = cm.getAllNetworkInfo();
+            if (info != null) {
+                for (int i = 0; i < info.length; i++) {
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public static void Log(Object ...obj) {
         for(Object o : obj){
@@ -108,5 +130,21 @@ public class Utils {
         }
         return false;
     }
+    /**
+     * 保存状态
+     */
+    public static final String PREF_NAME = "config";
 
+    public static boolean getBoolean(Context ctx, String key,
+                                     boolean defaultValue) {
+        SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME,
+                Context.MODE_PRIVATE);
+        return sp.getBoolean(key, defaultValue);
+    }
+
+    public static void setBoolean(Context ctx, String key, boolean value) {
+        SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME,
+                Context.MODE_PRIVATE);
+        sp.edit().putBoolean(key, value).commit();
+    }
 }

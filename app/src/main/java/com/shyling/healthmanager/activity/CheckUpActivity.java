@@ -116,6 +116,7 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
         System.out.println();
         checkUp.setSent(System.currentTimeMillis());
         checkUpDAO.add(checkUp);
+        onDestroy();
     }
 
     @Override

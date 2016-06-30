@@ -1,6 +1,7 @@
 package com.shyling.healthmanager.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -92,6 +93,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     /**
      * 网络登录
      */
+    private ProgressDialog progressdialog;
     private void processLogin() {
         userNumber = ed_Number.getText().toString();
         passWd = ed_Password.getText().toString();
@@ -101,6 +103,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Utils.Toast("请输入密码");
         } else {
             //输入无误
+            progressdialog = ProgressDialog.show(LoginActivity.this, "请等待...", "正在为您登陆...");
             EMChatManager.getInstance().login(userNumber, passWd, new EMCallBack() {//回调
                 @Override
                 public void onSuccess() {
@@ -120,9 +123,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {
                                             mPre.edit().putString("Json", responseInfo.result).commit();
+                                            Utils.setBoolean(LoginActivity.this,"is_user_logout",true);
                                             System.out.println("json :" + responseInfo.result);
                                             Utils.saveUser(LoginActivity.this, userNumber, passWd);
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            progressdialog.dismiss();
                                             finish();
                                         }
 
@@ -130,6 +135,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                         public void onFailure(HttpException e, String s) {
                                            /* startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                             finish();*/
+                                            progressdialog.dismiss();
                                             Utils.Toast("登陆失败");
                                         }
                                     });
@@ -148,7 +154,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onError(int code, String message) {
                     Log.d("main", "登陆聊天服务器失败！");
-                    Utils.Toast("登陆失败");
+                    progressdialog.dismiss();
+                    //Utils.Toast("登陆失败");
                 }
             });
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
