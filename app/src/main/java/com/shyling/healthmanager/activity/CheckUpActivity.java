@@ -16,19 +16,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.shyling.healthmanager.HealthManagerApplication;
 import com.shyling.healthmanager.R;
 import com.shyling.healthmanager.dao.CheckUpDAO;
 import com.shyling.healthmanager.model.CheckUp;
 import com.shyling.healthmanager.util.CheckUpAsyncTask;
 import com.shyling.healthmanager.util.Const;
-import com.shyling.healthmanager.util.Optional;
 import com.shyling.healthmanager.util.Utils;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
+import java.util.Locale;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -109,14 +107,18 @@ public class CheckUpActivity extends AppCompatActivity implements View.OnClickLi
 
     public void onCheckUpFinished(CheckUp checkUp){
         CheckUpDAO checkUpDAO = CheckUpDAO.getInstance();
-        checkUp.setCheckUpDate(new SimpleDateFormat("yyyy-mm-dd").format(new Date()));
-        Map<String, String> hashMap = Utils.getUser(HealthManagerApplication.healthManagerApplication);
-        String username = Optional.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
+        checkUp.setCheckUpDate(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
+        String username = Utils.getUser(this)[0];
         checkUp.setUser(username);
-        System.out.println();
         checkUp.setSent(System.currentTimeMillis());
         checkUpDAO.add(checkUp);
-        onDestroy();
+        new View(this).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CheckUpActivity.this.onDestroy();
+                CheckUpActivity.this.finish();
+            }
+        }, 2000);
     }
 
     @Override

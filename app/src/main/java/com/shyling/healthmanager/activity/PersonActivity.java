@@ -28,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.Map;
 
 
 /**
@@ -40,7 +39,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     Button modify_news, save_news;
     DBHelper dbHelper;
     SQLiteDatabase database;
-    Map<String, String> userMap;
+    String[] userMap;
     SharedPreferences mPre;
     private UserInfo userInfo;
     private String mName;

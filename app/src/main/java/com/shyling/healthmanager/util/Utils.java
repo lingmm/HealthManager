@@ -15,12 +15,7 @@ import com.shyling.healthmanager.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
-/**
- * Created by shy on 2015/11/8.
- */
 public class Utils {
     private static Toast toast;
     static SharedPreferences data;
@@ -89,14 +84,11 @@ public class Utils {
         return true;
     }
     //读取账号密码
-    public static Map<String,String> getUser(Context context){
+    public static String[] getUser(Context context){
         data = context.getSharedPreferences("Info",Context.MODE_PRIVATE);
-        String userName = data.getString("_userNumber",null);
-        String passWd = data.getString("_passWd",null);
-        Map<String,String> userMap = new HashMap<String,String>();
-        userMap.put("_userNumber", userName);
-        userMap.put("_passWd", passWd);
-        return userMap;
+        String userName = data.getString("_userNumber","");
+        String passWd = data.getString("_passWd","");
+        return new String[]{userName,passWd};
     }
 
     @Nullable
@@ -145,6 +137,6 @@ public class Utils {
     public static void setBoolean(Context ctx, String key, boolean value) {
         SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME,
                 Context.MODE_PRIVATE);
-        sp.edit().putBoolean(key, value).commit();
+        sp.edit().putBoolean(key, value).apply();
     }
 }

@@ -21,7 +21,6 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class CloudSyncService extends Service {
     String username;
@@ -40,9 +39,9 @@ public class CloudSyncService extends Service {
     };
 
     public CloudSyncService() {
-        Map<String, String> hashMap = Utils.getUser(HealthManagerApplication.healthManagerApplication);
-        username = Optional.of(hashMap.get("_userNumber")).getOrElse("undefined_username");
-        password = Optional.of(hashMap.get("_passWd")).getOrElse("undefined_password");
+        String[] userInfo = Utils.getUser(HealthManagerApplication.healthManagerApplication);
+        username = userInfo[0];
+        password = userInfo[1];
     }
 
     @Override

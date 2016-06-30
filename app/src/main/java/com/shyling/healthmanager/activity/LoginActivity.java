@@ -25,11 +25,8 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.shyling.healthmanager.R;
-import com.shyling.healthmanager.dao.UserDao;
 import com.shyling.healthmanager.util.Const;
 import com.shyling.healthmanager.util.Utils;
-
-import java.util.Map;
 
 /**
  * Created by Mars on 2015/11/3.
@@ -47,10 +44,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_login);
         initView();
         mPre = getSharedPreferences("userInfo", MODE_PRIVATE);
-        Map<String, String> userMap = Utils.getUser(LoginActivity.this);
+        String[] userMap = Utils.getUser(LoginActivity.this);
         if (userMap != null) {
-            ed_Number.setText(userMap.get("_userNumber"));
-            ed_Password.setText(userMap.get("_passWd"));
+            ed_Number.setText(userMap[0]);
+            ed_Password.setText(userMap[1]);
         }
 
     }
@@ -122,7 +119,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                     new RequestCallBack<String>() {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {
-                                            mPre.edit().putString("Json", responseInfo.result).commit();
+                                            mPre.edit().putString("Json", responseInfo.result).apply();
                                             Utils.setBoolean(LoginActivity.this,"is_user_logout",true);
                                             System.out.println("json :" + responseInfo.result);
                                             Utils.saveUser(LoginActivity.this, userNumber, passWd);

@@ -4,73 +4,86 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:text="帐    号："
-        android:textSize="18sp" />
-    <EditText
-        android:id="@+id/et_number"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:singleLine="true"
-        android:inputType="phone"
-        android:ems="12"
-        android:hint="手机号" />
-    </LinearLayout>
-    <View
-        style="@style/UnderLine" />
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <TextView
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.30"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:text="密    码："
-            android:textSize="18sp" />
-        <EditText
-            android:id="@+id/et_pwd"
+            android:layout_height="match_parent"
+            android:layout_weight="0.34">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="帐    号："
+                android:textSize="18sp"
+                android:layout_gravity="right"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="密    码："
+                android:textSize="18sp"
+                android:layout_gravity="right"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="再次密码："
+                android:textSize="18sp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:inputType="textPassword"
+            android:layout_height="match_parent"
+            android:layout_weight="0.34">
+
+            <EditText
+                android:id="@+id/et_number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
             android:singleLine="true"
+                android:inputType="phone"
             android:ems="12"
-            android:hint="输入你的密码" />
+                android:hint="手机号"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/et_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:ems="12"
+                android:hint="输入你的密码"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/et_repwd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:ems="12"
+                android:hint="再次输入密码"
+                android:layout_weight="1" />
+        </LinearLayout>
     </LinearLayout>
-    <View
-        style="@style/UnderLine" />
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:text="再次密码："
-            android:textSize="18sp" />
-        <EditText
-            android:id="@+id/et_repwd"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:inputType="textPassword"
-            android:ems="12"
-            android:hint="再次输入密码" />
-    </LinearLayout>
-    <View
-        style="@style/UnderLine" />
+
     <Button
         android:id="@+id/btn_post"
         android:layout_width="match_parent"
